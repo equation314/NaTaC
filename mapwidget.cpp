@@ -39,7 +39,6 @@ MapWidget::MapWidget(QWidget *parent) : QWidget(parent)
             if (m_cities[i]->Distance2(m_cities[j]->Point()) - Const::Sqr(m_size) < Const::EPS)
             {
                 m_roads[t++] = new Road(m_cities[i], m_cities[j]);
-                //qDebug()<<t<<' '<<i<<' '<<j;
             }
 
     for (int i = 0; i < Const::CITY_COUNT; i++)
@@ -53,6 +52,12 @@ MapWidget::~MapWidget()
 {
     for (int i = 0; i < Const::TILE_COUNT; i++)
         delete m_tiles[i];
+
+    for (int i = 0; i < Const::TILE_COUNT; i++)
+        delete m_cities[i];
+
+    for (int i = 0; i < Const::TILE_COUNT; i++)
+        delete m_roads[i];
 }
 
 void MapWidget::resizeEvent(QResizeEvent* event)
@@ -67,7 +72,7 @@ void MapWidget::paintEvent(QPaintEvent* event)
     QPainter painter(this);
 
     painter.setBrush(QColor(0, 132, 255));
-    painter.drawRect(0, 0, this->width()-1, this->height()-1);
+    painter.drawRect(0, 0, this->width() - 1, this->height() - 1);
     for (int i = 0; i < Const::TILE_COUNT; i++)
     {
         painter.setBrush(m_tiles[i]->Color());
@@ -87,9 +92,9 @@ void MapWidget::paintEvent(QPaintEvent* event)
                 break;
             }
             painter.save();
-            painter.translate(m_roads[i]->Position());
-            painter.rotate(m_roads[i]->Angle());
-            painter.drawRect(0, 0, 3 * m_size / 5, m_size / 10);
+            painter.translate(m_roads[i]->StartPoint());
+            painter.rotate(m_roads[i]->AngleD());
+            painter.drawRect(m_size / 8, -m_size / 12, 3 * m_size / 4, m_size / 6);
             painter.restore();
         }
 
@@ -115,13 +120,30 @@ void MapWidget::paintEvent(QPaintEvent* event)
 
 void MapWidget::mouseMoveEvent(QMouseEvent* event)
 {
+    bool hovered = false;
+
     for (int i = 0; i < Const::CITY_COUNT; i++)
         if (m_cities[i]->State() != Building::Level1 && m_cities[i]->State() != Building::Level2)
         {
-            if (m_cities[i]->Contains(event->pos(), m_size / 5))
+            if (m_cities[i]->Contains(event->pos(), m_size / 5) && !hovered)
+            {
                 m_cities[i]->SetState(Building::Hover);
+                hovered = true;
+            }
             else
                 m_cities[i]->SetState(Building::None);
+        }
+
+    for (int i = 0; i < Const::ROAD_COUNT; i++)
+        if (m_roads[i]->State() != Building::Level1)
+        {
+            if (m_roads[i]->Contains(event->pos(), m_size) && !hovered)
+            {
+                m_roads[i]->SetState(Building::Hover);
+                hovered = true;
+            }
+            else
+                m_roads[i]->SetState(Building::None);
         }
     this->update();
     QWidget::mouseMoveEvent(event);
@@ -129,6 +151,10 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event)
 
 void MapWidget::mousePressEvent(QMouseEvent* event)
 {
+    for (int i = 0; i < Const::ROAD_COUNT; i++)
+        if (m_roads[i]->Contains(event->pos(), m_size) && m_roads[i]->State() == Building::Hover)
+            m_roads[i]->SetState(Building::Level1);
+
     for (int i = 0; i < Const::CITY_COUNT; i++)
         if (m_cities[i]->Contains(event->pos(), m_size / 5))
         {

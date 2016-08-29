@@ -1,18 +1,21 @@
 #include "road.h"
 
+#include <QDebug>
+
 Road::Road(City* start, City* end) :
-    m_start(start), m_end(end), pos(m_start->Point())
+    m_start(start), m_end(end)
 {
     QPointF p = m_end->Point() - m_start->Point();
-    angle = atan2(p.y(), p.x());
-}
-
-QRect Road::Rect(double size)
-{
-
+    m_angle = atan2(p.y(), p.x());
 }
 
 bool Road::Contains(const QPointF &point, double length) const
 {
+    QPointF o = m_start->Point();
+    double x, y;
+    x = (point.x() - o.x()) * cos(-m_angle) - (point.y() - o.y()) * sin(-m_angle) + o.x();
+    y = (point.x() - o.x()) * sin(-m_angle) + (point.y() - o.y()) * cos(-m_angle) + o.y();
+    QRectF rect(o.x(), o.y() - length / 4, 3 * length / 4, length / 2);
 
+    return rect.contains(x, y);
 }

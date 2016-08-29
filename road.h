@@ -12,23 +12,19 @@ public:
     Road(City* start, City* end);
 
     // Getter member function
-    QPointF Position() const { return pos; }
-    double Angle() const { return angle; }
+    double AngleR() const { return m_angle; }
+    double AngleD() const { return m_angle * 180 / Const::PI; }
 
-    //QPointF StartPoint() const { return m_start->Point(); }
-    //QPointF EndPoint() const { return m_end->Point(); }
+    QPointF StartPoint() const { return m_start->Point(); }
+    QPointF EndPoint() const { return m_end->Point(); }
 
-    QRect Rect(double size);
-
-protected:
     bool Contains(const QPointF& point, double length) const override;
 
     // Setter member functions
 
 private:
     City *m_start, *m_end;
-    QPointF pos;
-    double angle;
+    double m_angle;
 };
 
 #endif // ROAD_H
