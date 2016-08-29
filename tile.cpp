@@ -6,7 +6,7 @@
 Tile::Tile()
 {
     for (int i = 0; i < 6; i++)
-        vertex[i] = nullptr;
+        m_cities[i] = nullptr;
 }
 /*
 Tile::Tile(double x, double y, double size) :
@@ -39,7 +39,7 @@ void Tile::buildPolygon()
               << m_center + QPointF( m_size * Const::SQRT3/ 2,  m_size / 2)
               << m_center + QPointF( m_size * Const::SQRT3/ 2, -m_size / 2);
     for (int i = 0; i < 6; i++)
-        if (vertex[i] != nullptr) vertex[i]->Move(m_polygon[i]);
+        if (m_cities[i] != nullptr) m_cities[i]->SetPoint(m_polygon[i]);
 
     //qDebug()<<center<<' '<<m_size<<' '<<' '<<m_polygon;
 }
