@@ -1,3 +1,9 @@
+# Build directory
+[Bb]uild/
+
+# Qt Creator user files
+*.user*
+
 # Compiled Object files
 *.slo
 *.lo
