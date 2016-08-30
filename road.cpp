@@ -9,6 +9,20 @@ Road::Road(City* start, City* end) :
     m_angle = atan2(p.y(), p.x());
 }
 
+bool Road::CanPlace() const
+{
+    if (this->IsBuilt()) return false;
+    if (m_start->Owner() == Player::CurrentPlayer() || m_end->Owner() == Player::CurrentPlayer())
+        return true;
+    for (int i = 0; i < m_start->RoadCount(); i++)
+        if (m_start->RoadAt(i)->Owner() == Player::CurrentPlayer())
+            return true;
+    for (int i = 0; i < m_end->RoadCount(); i++)
+        if (m_end->RoadAt(i)->Owner() == Player::CurrentPlayer())
+            return true;
+    return false;
+}
+
 bool Road::Contains(const QPointF &point, double length) const
 {
     QPointF o = m_start->Point();

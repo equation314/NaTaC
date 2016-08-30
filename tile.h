@@ -1,7 +1,7 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "city.h";
+#include "building.h"
 
 #include <QColor>
 #include <QPolygonF>

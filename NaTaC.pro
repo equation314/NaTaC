@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     tile.cpp \
     road.cpp \
     building.cpp \
-    city.cpp
+    city.cpp \
+    player.cpp
 
 HEADERS  += mainwindow.h \
     mapwidget.h \
@@ -28,6 +29,7 @@ HEADERS  += mainwindow.h \
     const.h \
     road.h \
     building.h \
-    city.h
+    city.h \
+    player.h
 
 FORMS    += mainwindow.ui

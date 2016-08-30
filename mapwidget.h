@@ -1,10 +1,8 @@
 #ifndef MAPWIDGET_H
 #define MAPWIDGET_H
 
-#include "road.h"
 #include "tile.h"
 #include "const.h"
-#include "city.h"
 
 #include <QWidget>
 

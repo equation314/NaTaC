@@ -1,4 +1,5 @@
-#include "const.h"
+#include "city.h"
+#include "road.h"
 #include "mapwidget.h"
 
 #include <QPainter>
@@ -38,14 +39,11 @@ MapWidget::MapWidget(QWidget *parent) : QWidget(parent)
         for (int j = i + 1; j < Const::CITY_COUNT; j++)
             if (m_cities[i]->Distance2(m_cities[j]->Point()) - Const::Sqr(m_size) < Const::EPS)
             {
-                m_roads[t++] = new Road(m_cities[i], m_cities[j]);
+                m_roads[t] = new Road(m_cities[i], m_cities[j]);
+                m_cities[i]->AddRoad(m_roads[t]);
+                m_cities[j]->AddRoad(m_roads[t]);
+                t++;
             }
-
-    for (int i = 0; i < Const::CITY_COUNT; i++)
-        m_cities[i]->SetColor(Qt::green);
-
-    for (int i = 0; i < Const::ROAD_COUNT; i++)
-        m_roads[i]->SetColor(Qt::green);
 }
 
 MapWidget::~MapWidget()
@@ -123,9 +121,9 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event)
     bool hovered = false;
 
     for (int i = 0; i < Const::CITY_COUNT; i++)
-        if (m_cities[i]->State() != Building::Level1 && m_cities[i]->State() != Building::Level2)
+        if (!m_cities[i]->IsBuilt())
         {
-            if (m_cities[i]->Contains(event->pos(), m_size / 5) && !hovered)
+            if (m_cities[i]->CanPlace() && m_cities[i]->Contains(event->pos(), m_size / 5) && !hovered)
             {
                 m_cities[i]->SetState(Building::Hover);
                 hovered = true;
@@ -135,7 +133,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event)
         }
 
     for (int i = 0; i < Const::ROAD_COUNT; i++)
-        if (m_roads[i]->State() != Building::Level1)
+        if (!m_roads[i]->IsBuilt() && m_roads[i]->CanPlace())
         {
             if (m_roads[i]->Contains(event->pos(), m_size) && !hovered)
             {
@@ -152,17 +150,12 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event)
 void MapWidget::mousePressEvent(QMouseEvent* event)
 {
     for (int i = 0; i < Const::ROAD_COUNT; i++)
-        if (m_roads[i]->Contains(event->pos(), m_size) && m_roads[i]->State() == Building::Hover)
-            m_roads[i]->SetState(Building::Level1);
+        if (m_roads[i]->CanPlace() && m_roads[i]->Contains(event->pos(), m_size))
+            m_roads[i]->Build();
 
     for (int i = 0; i < Const::CITY_COUNT; i++)
-        if (m_cities[i]->Contains(event->pos(), m_size / 5))
-        {
-            if (m_cities[i]->State() == Building::Hover)
-                m_cities[i]->SetState(Building::Level1);
-            else if (m_cities[i]->State() == Building::Level1)
-                m_cities[i]->SetState(Building::Level2);
-        }
+        if (m_cities[i]->CanPlace() && m_cities[i]->Contains(event->pos(), m_size / 5))
+            m_cities[i]->Build();
     this->update();
     QWidget::mouseMoveEvent(event);
 }
