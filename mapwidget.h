@@ -13,11 +13,14 @@ public:
     explicit MapWidget(QWidget *parent = nullptr);
     ~MapWidget();
 
+    void SetCurrentBuilding(Building::BuildingType type) { m_current_building = type; }
+
 public slots:
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    void leaveEvent(QEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 
@@ -27,6 +30,7 @@ private:
     Road* m_roads[Const::ROAD_COUNT];
     double m_size;
     QPointF m_center;
+    Building::BuildingType m_current_building;
 
     void buildTiles();
 };

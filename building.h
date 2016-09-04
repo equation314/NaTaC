@@ -12,13 +12,13 @@ class City;
 class Building
 {
 public:
-    enum BuildingType { CityType, RoadType };
+    enum BuildingType { NoneType, RoadType, VillageType, CityType };
+    enum BuildingClass { RoadClass, CityClass };
     enum BuildingState
     {
         None,
         Hover,
-        Level1,
-        Level2
+        Built
     };
 
     Building();
@@ -26,8 +26,9 @@ public:
 
     // Getter member functions
     Player* Owner() const { return m_owner; }
+    BuildingType Type() const { return m_type; }
     BuildingState State() const { return m_state; }
-    bool IsBuilt() const { return m_state >= BuildingState::Level1; }
+    bool IsBuilt() const { return m_state == BuildingState::Built || m_type != NoneType; }
     QColor TransparentColor() const
     {
         QColor color = Color();
@@ -47,13 +48,13 @@ public:
 
     bool Build();
 
-    virtual BuildingType Type() const = 0;
-    virtual BuildingState MaxLevel() const = 0;
+    virtual BuildingClass Class() const = 0;
     virtual bool CanPlace() const = 0;
     virtual bool Contains(const QPointF& point, double size) const = 0;
 
 private:
     Player* m_owner;
+    BuildingType m_type;
     BuildingState m_state;
 };
 

@@ -11,7 +11,7 @@ Player::Player(int id) :
 
 void Player::Build(Building *building)
 {
-    if (building->Type() == Building::CityType)
+    if (building->Type() == Building::VillageType)
         m_city_count++;
     else if (building->Type() == Building::RoadType)
         m_road_count++;

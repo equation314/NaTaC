@@ -15,7 +15,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
+    mainwindow.cpp \
     mapwidget.cpp \
     tile.cpp \
     road.cpp \
@@ -32,4 +32,4 @@ HEADERS  += mainwindow.h \
     city.h \
     player.h
 
-FORMS    += mainwindow.ui
+FORMS    += form/mainwindow.ui

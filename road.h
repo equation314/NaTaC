@@ -24,8 +24,7 @@ public:
     // Setter member functions
 
     bool CanPlace() const override;
-    BuildingType Type() const override { return RoadType; }
-    BuildingState MaxLevel() const override { return Level1; }
+    BuildingClass Class() const override { return RoadClass; }
     bool Contains(const QPointF& point, double length) const override;
 
 

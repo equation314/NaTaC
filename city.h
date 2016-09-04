@@ -23,8 +23,7 @@ public:
     void AddRoad(Road* road) { m_roads[m_road_count++] = road; }
 
     bool CanPlace()  const override;
-    BuildingType Type() const override { return CityType; }
-    BuildingState MaxLevel() const override { return Level2; }
+    BuildingClass Class() const override { return CityClass; }
     bool Contains(const QPointF& point, double radius) const override
     {
         return Distance2(point) <= Const::Sqr(radius);
