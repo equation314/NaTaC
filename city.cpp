@@ -16,11 +16,11 @@ bool City::CanPlace() const
     bool ok = false;
     for (int i = 0; i < m_road_count; i++)
     {
-        if (m_roads[i]->Owner() == Player::CurrentPlayer()) ok = true;
+        if (m_roads[i]->OwnerId() == Player::Self()->Id()) ok = true;
         if (m_roads[i]->Start() != this && m_roads[i]->Start()->IsBuilt()) return false;
         if (m_roads[i]->End() != this && m_roads[i]->End()->IsBuilt()) return false;
     }
-    if (Player::CurrentPlayer()->CityCount() < Const::INITIAL_CITY_COUNT)
+    if (Player::Self()->CityCount() < Const::INITIAL_CITY_COUNT)
         return true;
     return ok;
 }

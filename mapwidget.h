@@ -33,6 +33,9 @@ private:
     Building::BuildingType m_current_building;
 
     void buildTiles();
+
+signals:
+    void buildingBuilt(Building* building, int id);
 };
 
 #endif // MAPWIDGET_H

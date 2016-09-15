@@ -12,13 +12,13 @@ Road::Road(City* start, City* end) :
 bool Road::CanPlace() const
 {
     if (this->IsBuilt()) return false;
-    if (m_start->Owner() == Player::CurrentPlayer() || m_end->Owner() == Player::CurrentPlayer())
+    if (m_start->OwnerId() == Player::Self()->Id() || m_end->OwnerId() == Player::Self()->Id())
         return true;
     for (int i = 0; i < m_start->RoadCount(); i++)
-        if (m_start->RoadAt(i)->Owner() == Player::CurrentPlayer())
+        if (m_start->RoadAt(i)->OwnerId() == Player::Self()->Id())
             return true;
     for (int i = 0; i < m_end->RoadCount(); i++)
-        if (m_end->RoadAt(i)->Owner() == Player::CurrentPlayer())
+        if (m_end->RoadAt(i)->OwnerId() == Player::Self()->Id())
             return true;
     return false;
 }

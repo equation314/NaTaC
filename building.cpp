@@ -1,8 +1,8 @@
 #include "player.h"
 #include "building.h"
-#include <QDebug>
+
 Building::Building() :
-    m_owner(nullptr), m_type(NoneType), m_state(None)
+    m_owner_id(-1), m_type(NoneType), m_state(None)
 {
 
 }
@@ -14,7 +14,7 @@ bool Building::Build()
     else if (Class() == CityClass) m_type = VillageType;
     else if (Class() == RoadClass)  m_type = RoadType;
 
-    m_owner = Player::CurrentPlayer();
-    m_owner->Build(this);
+    m_owner_id = Player::Self()->Id();
+    Player::Self()->Build(this);
     return true;
 }

@@ -118,7 +118,7 @@ void MapWidget::paintEvent(QPaintEvent* event)
         QPointF pos = this->mapFromGlobal(QCursor::pos());
         if (this->rect().contains(pos.x(), pos.y()))
         {
-            painter.setBrush(Player::CurrentPlayer()->Color());
+            painter.setBrush(Player::Self()->Color());
             switch (m_current_building)
             {
             case Building::RoadType:
@@ -186,14 +186,20 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
     {
         for (int i = 0; i < Const::ROAD_COUNT; i++)
             if (m_roads[i]->CanPlace() && m_roads[i]->Contains(event->pos(), m_size))
+            {
                 m_roads[i]->Build();
+                emit buildingBuilt(m_roads[i], i);
+            }
     }
 
     if (m_current_building == Building::VillageType || m_current_building == Building::CityType)
     {
         for (int i = 0; i < Const::CITY_COUNT; i++)
             if (m_cities[i]->CanPlace() && m_cities[i]->Contains(event->pos(), m_size / 5))
+            {
                 m_cities[i]->Build();
+                emit buildingBuilt(m_roads[i], i);
+            }
     }
     this->update();
     QWidget::mouseMoveEvent(event);

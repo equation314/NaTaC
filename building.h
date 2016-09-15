@@ -25,7 +25,7 @@ public:
     virtual ~Building() {}
 
     // Getter member functions
-    Player* Owner() const { return m_owner; }
+    int OwnerId() const { return m_owner_id; }
     BuildingType Type() const { return m_type; }
     BuildingState State() const { return m_state; }
     bool IsBuilt() const { return m_state == BuildingState::Built || m_type != NoneType; }
@@ -38,9 +38,9 @@ public:
     QColor Color() const
     {
         if (IsBuilt())
-            return m_owner->Color();
+            return Const::PLAYER_COLOR[m_owner_id];
         else
-            return Player::CurrentPlayer()->Color();
+            return Player::Self()->Color();
     }
 
     // Setter member functions
@@ -53,7 +53,7 @@ public:
     virtual bool Contains(const QPointF& point, double size) const = 0;
 
 private:
-    Player* m_owner;
+    int m_owner_id;
     BuildingType m_type;
     BuildingState m_state;
 };
