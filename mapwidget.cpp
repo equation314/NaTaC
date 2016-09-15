@@ -70,6 +70,7 @@ void MapWidget::resizeEvent(QResizeEvent* event)
 void MapWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
+    painter.setRenderHint( QPainter::Antialiasing);
 
     painter.setBrush(QColor(0, 132, 255));
     painter.drawRect(0, 0, this->width() - 1, this->height() - 1);
