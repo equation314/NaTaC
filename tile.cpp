@@ -30,7 +30,7 @@ void Tile::SetGeometry(const QPointF &center, double size)
 
 void Tile::buildPolygon()
 {
-    m_color = Qt::red;
+    m_color = QColor(255, 217, 85);
     m_polygon.clear();
     m_polygon << m_center + QPointF(0, -m_size)
               << m_center + QPointF(-m_size * Const::SQRT3/ 2, -m_size / 2)

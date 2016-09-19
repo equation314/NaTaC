@@ -5,7 +5,7 @@ Player* Player::s_self = nullptr;
 int Player::s_current_player_id = -1;
 
 Player::Player(int id) :
-    m_id(id), m_city_count(0), m_road_count(0), m_score(0)
+    m_id(id), m_road_count(0), m_village_count(0), m_city_count(0), m_score(0)
 {
     memset(m_resources, 0, sizeof(m_resources));
 }
@@ -20,7 +20,7 @@ bool Player::CanbuildRoad() const
 
 bool Player::CanbuildVillage() const
 {
-    if (m_city_count < Const::INITIAL_ROAD_COUNT) return true;
+    if (CityClassCount() < Const::INITIAL_CITY_COUNT) return true;
     for (int i = 0; i < Const::RESOURCES_COUNT; i++)
         if (m_resources[i] < Const::DEPEND[1][i]) return false;
     return true;
@@ -42,10 +42,21 @@ bool Player::CanUseDevelopmentCard() const
 
 void Player::Build(Building* building)
 {
-    if (building->Type() == Building::RoadType)
+    switch (building->Type())
+    {
+    case Building::RoadType:
         m_road_count++;
-    else if (building->Type() == Building::VillageType)
+        break;
+    case Building::VillageType:
+        m_village_count++;
+        m_score++;
+        break;
+    case Building::CityType:
+        m_village_count--;
         m_city_count++;
+        m_score++;
+        break;
+    }
 
     if (m_road_count > Const::INITIAL_ROAD_COUNT || m_city_count > Const::INITIAL_CITY_COUNT)
     {

@@ -20,7 +20,7 @@ bool City::CanPlace() const
         if (m_roads[i]->Start() != this && m_roads[i]->Start()->IsBuilt()) return false;
         if (m_roads[i]->End() != this && m_roads[i]->End()->IsBuilt()) return false;
     }
-    if (Player::Self()->CityCount() < Const::INITIAL_CITY_COUNT)
+    if (Player::Self()->CityClassCount() < Const::INITIAL_CITY_COUNT)
         return true;
     return ok;
 }

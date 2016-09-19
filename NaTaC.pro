@@ -33,3 +33,6 @@ HEADERS  += mainwindow.h \
     player.h
 
 FORMS    += form/mainwindow.ui
+
+RESOURCES += \
+    resource/res.qrc

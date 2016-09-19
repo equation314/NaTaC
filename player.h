@@ -17,8 +17,11 @@ public:
 
     // Getter member functions
     int Id() const { return m_id; }
-    int CityCount() const { return m_city_count; }
+    int Score() const { return m_score; }
     int RoadCount() const { return m_road_count; }
+    int VillageCount() const { return m_village_count; }
+    int CityCount() const { return m_city_count; }
+    int CityClassCount() const { return m_village_count + m_city_count; }
     int ResourceAt(int i) const { return m_resources[i]; }
     QColor Color() const { return Const::PLAYER_COLOR[m_id]; }
 
@@ -33,7 +36,7 @@ private:
     static int s_current_player_id;
 
     int m_id;
-    int m_city_count, m_road_count, m_score;
+    int m_road_count, m_village_count, m_city_count, m_score;
     int m_resources[Const::RESOURCES_COUNT];
 };
 
