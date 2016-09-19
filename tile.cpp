@@ -3,7 +3,8 @@
 
 #include <QDebug>
 
-Tile::Tile()
+Tile::Tile(int number) :
+    m_number(number)
 {
     for (int i = 0; i < 6; i++)
         m_cities[i] = nullptr;

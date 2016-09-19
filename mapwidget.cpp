@@ -17,7 +17,7 @@ MapWidget::MapWidget(QWidget *parent) :
     for (int i = 0; i < Const::CITY_COUNT; i++)
         m_cities[i] = nullptr;
     for (int i = 0; i < Const::TILE_COUNT; i++)
-        m_tiles[i] = new Tile;
+        m_tiles[i] = new Tile(i%12+1);
 
     buildTiles();
     for (int i = 0, t = 0; i < Const::TILE_COUNT; i++)
@@ -70,14 +70,28 @@ void MapWidget::resizeEvent(QResizeEvent* event)
 void MapWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    painter.setRenderHint( QPainter::Antialiasing);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     painter.setBrush(QColor(0, 162, 232));
     painter.drawRect(0, 0, this->width() - 1, this->height() - 1);
+
     for (int i = 0; i < Const::TILE_COUNT; i++)
     {
         painter.setBrush(m_tiles[i]->Color());
         painter.drawPolygon(m_tiles[i]->Polygon());
+
+        int number = m_tiles[i]->Number();
+        painter.setPen(QPen((number == 6 || number == 8) ? Qt::red : Qt::black, 2));
+        painter.setBrush(Qt::white);
+        painter.drawEllipse(m_tiles[i]->Center(), m_size / 3, m_size / 3);
+
+        int len = m_size / 2;
+        QFont font("微软雅黑");
+        font.setPixelSize(m_size / 2 / 4 * 3);
+        painter.setFont(font);
+        painter.drawText(m_tiles[i]->Center().x() - len / 2, m_tiles[i]->Center().y() - len / 2, len, len, Qt::AlignCenter, QString::number(number));
+
+        painter.setPen(QPen(Qt::black, 1));
     }
 
     for (int i = 0; i < Const::ROAD_COUNT; i++)
@@ -204,7 +218,6 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
     this->update();
     QWidget::mouseMoveEvent(event);
 }
-
 
 void MapWidget::buildTiles()
 {

@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ui->label_dice_2->setPixmap(QString(":/img/img/%1.png").arg(y));
             m_current_number = x + y;
         }
-        if (m_dice_time_elapsed >= 3600)
+        if (m_dice_time_elapsed >= 3000)
         {
             m_dice_timer.stop();
             m_dice_time_elapsed = 0;

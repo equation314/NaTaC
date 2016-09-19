@@ -28,7 +28,7 @@ private:
     Tile* m_tiles[Const::TILE_COUNT];
     City* m_cities[Const::CITY_COUNT];
     Road* m_roads[Const::ROAD_COUNT];
-    double m_size;
+    double m_size; /// Side length of the hexagonal tile
     QPointF m_center;
     Building::BuildingType m_current_building;
 

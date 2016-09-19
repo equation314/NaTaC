@@ -9,12 +9,14 @@
 class Tile
 {
 public:
-    Tile();
+    Tile(int number);
     //Tile(double x, double y, double size);
     //Tile(const QPointF& center, double size);
 
     // Getter member functions
+    int Number() const { return m_number; }
     QColor Color() const { return m_color; }
+    QPointF Center() const { return m_center;}
     QPolygonF Polygon() const { return m_polygon; }
 
     // Setter member functions
@@ -26,7 +28,8 @@ private:
     QPointF m_center;
     QPolygonF m_polygon;
     QColor m_color;
-    double m_size;
+    int m_number;
+    double m_size; /// Side length of the hexagonal tile
     City* m_cities[6];
 
     void buildPolygon();
