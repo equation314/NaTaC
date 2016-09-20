@@ -16,11 +16,13 @@ public:
     static int CurrentPlayerId() { return s_current_player_id; }
     static void SetCurrentPlayerId(int id) { s_current_player_id = id; }
 
-    explicit Player(int id);
+    explicit Player(int id, const QString& name);
     ~Player() {}
 
     // Getter member functions
     int Id() const { return m_id; }
+    QString Name() const { return m_name; }
+    QString ColorName() const { return QString("<span style=\"color:%1\">%2</span>").arg(Color().name()).arg(m_name); }
     int Score() const { return m_score; }
     int RoadCount() const { return m_road_count; }
     int VillageCount() const { return m_village_count; }
@@ -42,6 +44,7 @@ private:
     static int s_current_player_id;
 
     int m_id;
+    QString m_name;
     int m_road_count, m_village_count, m_city_count, m_score;
     int m_resources[Const::RESOURCE_COUNT];
     bool m_is_ready;

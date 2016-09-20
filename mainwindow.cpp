@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QMimeData>
 #include <QMouseEvent>
+#include <QTime>
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,20 +14,27 @@ MainWindow::MainWindow(QWidget *parent) :
     m_dice_time_elapsed(0)
 {
     ui->setupUi(this);
-    Player::SetSelf(new Player(0));
+    Player::SetSelf(new Player(0, "Player0"));
     Player::SetCurrentPlayerId(0);
     updateResource();
 
     loadMap();
 
-    connect(ui->widget_map, &MapWidget::buildingBuilt, this, &MainWindow::onBuildingBuilt);
     connect(&m_dice_timer, &QTimer::timeout, this, &MainWindow::onDiceTimerTimout);
     connect(Player::Self(), &Player::ready, this, &MainWindow::on_pushButton_finish_clicked);
+    connect(ui->widget_map, &MapWidget::obtainedResources, this, &MainWindow::onObtainedResources);
+    connect(ui->widget_map, &MapWidget::buildingBuilt, this, &MainWindow::onBuildingBuilt);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::sendMessage(const QString& message)
+{
+    QString text = QString("[%1]%2").arg(QTime::currentTime().toString("hh:mm:ss")).arg(Player::Self()->ColorName()) + message;
+    ui->textEdit->append(text);
 }
 
 void MainWindow::loadMap()
@@ -115,13 +123,28 @@ void MainWindow::onDiceTimerTimout()
 void MainWindow::onDiceFinished()
 {
     qDebug()<<m_current_number;
+    sendMessage(tr(" rolled the number <strong>%1</strong>.").arg(m_current_number));
     ui->widget_map->ObtainResources(m_current_number);
     ui->pushButton_trade->setEnabled(true);
     ui->pushButton_finish->setEnabled(true);
     updateResource();
 }
 
-void MainWindow::onBuildingBuilt(Building* /*building*/, int /*id*/)
+void MainWindow::onObtainedResources(int cnt[])
+{
+    bool ok = false;
+    QString message = tr(" obtained ");
+    for (int i = 0; i < Const::RESOURCE_COUNT; i++)
+        if (cnt[i])
+        {
+            ok = true;
+            message += QString("<span style=\"color:%1\">%2</span> x%3, ").arg(Const::RESOURCE_COLOR[i].name()).arg(Const::RESOURCE_NAME[i]).arg(cnt[i]);
+        }
+    message.replace(message.length() - 2, 2, ".");
+    if (ok) sendMessage(message);
+}
+
+void MainWindow::onBuildingBuilt(Building* building, int /*id*/)
 {
     updateResource();
 
@@ -129,6 +152,23 @@ void MainWindow::onBuildingBuilt(Building* /*building*/, int /*id*/)
     ui->label_village_count->setText(QString::number(Player::Self()->VillageCount()));
     ui->label_city_count->setText(QString::number(Player::Self()->CityCount()));
     ui->label_score->setText(QString::number(Player::Self()->Score()));
+
+    switch (building->Type())
+    {
+    case Building::RoadType:
+        sendMessage(tr(" built a road."));
+        break;
+    case Building::VillageType:
+        sendMessage(tr(" built a village."));
+        sendMessage(tr(" got 1 point."));
+        break;
+    case Building::CityType:
+        sendMessage(tr(" upgraded a village to a city."));
+        sendMessage(tr(" got 1 point."));
+        break;
+    default:
+        break;
+    }
 }
 
 void MainWindow::on_pushButton_road_clicked(bool checked)
@@ -169,7 +209,7 @@ void MainWindow::on_pushButton_city_clicked(bool checked)
 
 void MainWindow::on_pushButton_dev_clicked()
 {
-
+    sendMessage(tr(" bought a development card."));
 }
 
 void MainWindow::on_pushButton_dice_clicked()
@@ -191,4 +231,17 @@ void MainWindow::on_pushButton_finish_clicked()
     ui->pushButton_road->setChecked(false);
     ui->pushButton_village->setChecked(false);
     ui->pushButton_city->setChecked(false);
+}
+
+void MainWindow::on_pushButton_send_clicked()
+{
+    QString message = ui->lineEdit->text();
+    if (message.trimmed().isEmpty()) return;
+    ui->lineEdit->clear();
+    sendMessage(": " + message.toHtmlEscaped());
+}
+
+void MainWindow::on_lineEdit_returnPressed()
+{
+    on_pushButton_send_clicked();
 }

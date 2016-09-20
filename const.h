@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <QColor>
-#include <QList>
+#include <QObject>
 
 namespace Const
 {
@@ -57,6 +57,16 @@ const QList<QColor> RESOURCE_COLOR =
     QColor(255, 170, 0),
     QColor(108, 108, 108),
     QColor(255, 217, 85),
+};
+
+const QStringList RESOURCE_NAME =
+{
+    QObject::tr("brick"),
+    QObject::tr("lumber"),
+    QObject::tr("wool"),
+    QObject::tr("grain"),
+    QObject::tr("ore"),
+    QObject::tr("desert"),
 };
 
 }

@@ -14,12 +14,7 @@ class Building
 public:
     enum BuildingType { NoneType, RoadType, VillageType, CityType };
     enum BuildingClass { RoadClass, CityClass };
-    enum BuildingState
-    {
-        None,
-        Hover,
-        Built
-    };
+    enum BuildingState { None, Hover, Built };
 
     Building();
     virtual ~Building() {}

@@ -4,8 +4,8 @@
 Player* Player::s_self = nullptr;
 int Player::s_current_player_id = -1;
 
-Player::Player(int id) :
-    m_id(id), m_road_count(0), m_village_count(0), m_city_count(0), m_score(0), m_is_ready(false)
+Player::Player(int id, const QString& name) :
+    m_id(id), m_name(name), m_road_count(0), m_village_count(0), m_city_count(0), m_score(0), m_is_ready(false)
 {
     memset(m_resources, 0, sizeof(m_resources));
 }
@@ -55,6 +55,8 @@ void Player::Build(Building* building)
         m_village_count--;
         m_city_count++;
         m_score++;
+        break;
+    default:
         break;
     }
 

@@ -78,6 +78,8 @@ void MapWidget::paintEvent(QPaintEvent* event)
             case Building::Built:
                 painter.setBrush(m_cities[i]->Color());
                 break;
+            default:
+                break;
             }
             painter.save();
             painter.translate(m_roads[i]->StartPoint());
@@ -116,6 +118,8 @@ void MapWidget::paintEvent(QPaintEvent* event)
                 break;
             case Building::CityType:
                 painter.drawRect(pos.x() - m_size / 5, pos.y() - m_size / 5, m_size / 2.5, m_size / 2.5);
+                break;
+            default:
                 break;
             }
         }
@@ -188,7 +192,7 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
             if (m_cities[i]->CanPlace() && m_cities[i]->Contains(event->pos(), m_size / 5))
             {
                 m_cities[i]->Build();
-                emit buildingBuilt(m_roads[i], i);
+                emit buildingBuilt(m_cities[i], i);
             }
     }
     this->update();
@@ -200,7 +204,7 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
 void MapWidget::buildTiles()
 {
     m_center = QPointF(this->width() / 2, this->height() / 2);
-    m_size = min(this->height() / 8.0, this->width() / 5 / Const::SQRT3) * 0.85;
+    m_size = min(this->height() / 8.0, this->width() / 5 / Const::SQRT3) * 0.8;
 
     if (!m_loaded) return;
 
@@ -267,13 +271,19 @@ void MapWidget::Load(Const::Resource type[], int num[])
             }
 }
 
-void MapWidget::ObtainResources(int num)
+void MapWidget::ObtainResources(int number)
 {
+    int cnt[Const::RESOURCE_COUNT] = {0};
     for (int i = 0; i < Const::TILE_COUNT; i++)
-        if (m_tiles[i]->Number() == num)
+        if (m_tiles[i]->Number() == number)
         {
             for (int j = 0; j < 6; j++)
                 if (m_tiles[i]->CityAt(j)->OwnerId() == Player::Self()->Id())
-                    Player::Self()->ObtainResources(m_tiles[i]->Type(), m_tiles[i]->CityAt(j)->Type() == Building::CityType ? 2 : 1);
+                {
+                    int x = m_tiles[i]->CityAt(j)->Type() == Building::CityType ? 2 : 1;
+                    Player::Self()->ObtainResources(m_tiles[i]->Type(), x);
+                    cnt[(size_t)m_tiles[i]->Type()] += x;
+                }
         }
+    emit obtainedResources(cnt);
 }
