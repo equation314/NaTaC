@@ -20,7 +20,7 @@ bool Player::CanbuildRoad() const
 
 bool Player::CanbuildVillage() const
 {
-    if (CityClassCount() < Const::INITIAL_CITY_COUNT) return true;
+    if (m_village_count < Const::INITIAL_CITY_COUNT && !m_city_count) return true;
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)
         if (m_resources[i] < Const::DEPEND[1][i]) return false;
     return true;
@@ -60,12 +60,12 @@ void Player::Build(Building* building)
         break;
     }
 
-    if (m_road_count == Const::INITIAL_ROAD_COUNT && CityClassCount() == Const::INITIAL_CITY_COUNT && !m_is_ready)
+    if (m_road_count == Const::INITIAL_ROAD_COUNT && m_village_count == Const::INITIAL_CITY_COUNT && !m_city_count && !m_is_ready)
     {
         m_is_ready = true;
         emit ready();
     }
-    if (m_road_count > Const::INITIAL_ROAD_COUNT || CityClassCount() > Const::INITIAL_CITY_COUNT)
+    if (m_road_count > Const::INITIAL_ROAD_COUNT || m_village_count > Const::INITIAL_CITY_COUNT || m_city_count)
     {
         for (int i = 0; i < Const::RESOURCE_COUNT; i++)
         {
@@ -77,4 +77,10 @@ void Player::Build(Building* building)
                 m_resources[i] -= Const::DEPEND[2][i];
         }
     }
+}
+
+void Player::BuyDevelopmentCard()
+{
+    for (int i = 0; i < Const::RESOURCE_COUNT; i++)
+        m_resources[i] -= Const::DEPEND[3][i];
 }

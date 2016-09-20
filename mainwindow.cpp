@@ -14,10 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
     m_dice_time_elapsed(0)
 {
     ui->setupUi(this);
+    ui->splitter->setStretchFactor(1, 1);
+
     Player::SetSelf(new Player(0, "Player0"));
     Player::SetCurrentPlayerId(0);
-    updateResource();
+    ui->label_user->setText(Player::Self()->ColorName());
 
+    updateResource();
     loadMap();
 
     connect(&m_dice_timer, &QTimer::timeout, this, &MainWindow::onDiceTimerTimout);
@@ -210,6 +213,8 @@ void MainWindow::on_pushButton_city_clicked(bool checked)
 void MainWindow::on_pushButton_dev_clicked()
 {
     sendMessage(tr(" bought a development card."));
+    Player::Self()->BuyDevelopmentCard();
+    updateResource();
 }
 
 void MainWindow::on_pushButton_dice_clicked()

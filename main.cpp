@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    qsrand(QTime::currentTime().msecsSinceStartOfDay());
+    srand(QTime::currentTime().msecsSinceStartOfDay());
 
     QApplication a(argc, argv);
     MainWindow w;
