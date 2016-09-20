@@ -14,8 +14,8 @@ public:
     ~MapWidget();
 
     void SetCurrentBuilding(Building::BuildingType type) { m_current_building = type; }
-
-public slots:
+    void Load(Const::Resource type[Const::TILE_COUNT], int num[Const::TILE_COUNT]);
+    void ObtainResources(int num);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -31,6 +31,7 @@ private:
     double m_size; /// Side length of the hexagonal tile
     QPointF m_center;
     Building::BuildingType m_current_building;
+    bool m_loaded;
 
     void buildTiles();
 

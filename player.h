@@ -3,9 +3,13 @@
 
 #include "const.h"
 
+#include <QObject>
+
 class Building;
-class Player
+class Player : public QObject
 {
+    Q_OBJECT
+
 public:
     static Player* Self() { return s_self; }
     static void SetSelf(Player* player) { s_self = player; }
@@ -29,7 +33,9 @@ public:
     bool CanbuildVillage() const;
     bool CanbuildCity() const;
     bool CanUseDevelopmentCard() const;
+
     void Build(Building* building);
+    void ObtainResources(Const::Resource type, int num) { m_resources[(size_t)type] += num; }
 
 private:
     static Player* s_self;
@@ -37,7 +43,11 @@ private:
 
     int m_id;
     int m_road_count, m_village_count, m_city_count, m_score;
-    int m_resources[Const::RESOURCES_COUNT];
+    int m_resources[Const::RESOURCE_COUNT];
+    bool m_is_ready;
+
+signals:
+    void ready();
 };
 
 #endif // PLAYER_H

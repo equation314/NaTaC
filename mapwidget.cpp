@@ -10,52 +10,21 @@ using namespace std;
 
 MapWidget::MapWidget(QWidget *parent) :
     QWidget(parent),
-    m_current_building(Building::NoneType)
+    m_current_building(Building::NoneType), m_loaded(false)
 {
     this->setMouseTracking(true);
 
-    for (int i = 0; i < Const::CITY_COUNT; i++)
-        m_cities[i] = nullptr;
-    for (int i = 0; i < Const::TILE_COUNT; i++)
-        m_tiles[i] = new Tile(i%12+1);
-
-    buildTiles();
-    for (int i = 0, t = 0; i < Const::TILE_COUNT; i++)
-    {
-        for (int j = 0; j < 6; j++)
-        {
-            City* city = nullptr;
-            for (int k = 0; k < t; k++)
-                if (m_cities[k]->Distance2(m_tiles[i]->Polygon()[j]) < Const::EPS) city = m_cities[k];
-            //qDebug()<<i<<' '<<j<<' '<<city<<' '<<n<<' '<<m_tiles[i]->Polygon()[j];
-            if (city == nullptr)
-            {
-                city = new City(m_tiles[i]->Polygon()[j]);
-                m_cities[t++] = city;
-            }
-            m_tiles[i]->SetCity(j, city);
-        }
-    }
-
-    for (int i = 0, t = 0; i < Const::CITY_COUNT; i++)
-        for (int j = i + 1; j < Const::CITY_COUNT; j++)
-            if (m_cities[i]->Distance2(m_cities[j]->Point()) - Const::Sqr(m_size) < Const::EPS)
-            {
-                m_roads[t] = new Road(m_cities[i], m_cities[j]);
-                m_cities[i]->AddRoad(m_roads[t]);
-                m_cities[j]->AddRoad(m_roads[t]);
-                t++;
-            }
+    memset(m_tiles, 0, sizeof(m_tiles));
+    memset(m_cities, 0, sizeof(m_cities));
+    memset(m_roads, 0, sizeof(m_roads));
 }
 
 MapWidget::~MapWidget()
 {
     for (int i = 0; i < Const::TILE_COUNT; i++)
         delete m_tiles[i];
-
     for (int i = 0; i < Const::TILE_COUNT; i++)
         delete m_cities[i];
-
     for (int i = 0; i < Const::TILE_COUNT; i++)
         delete m_roads[i];
 }
@@ -75,23 +44,27 @@ void MapWidget::paintEvent(QPaintEvent* event)
     painter.setBrush(QColor(0, 162, 232));
     painter.drawRect(0, 0, this->width() - 1, this->height() - 1);
 
+    if (!m_loaded) return;
+
     for (int i = 0; i < Const::TILE_COUNT; i++)
     {
         painter.setBrush(m_tiles[i]->Color());
         painter.drawPolygon(m_tiles[i]->Polygon());
 
-        int number = m_tiles[i]->Number();
-        painter.setPen(QPen((number == 6 || number == 8) ? Qt::red : Qt::black, 2));
+        int num = m_tiles[i]->Number();
+        if (!num) continue;
+
+        painter.setPen(QPen((num == 6 || num == 8) ? Qt::red : Qt::black, 2));
         painter.setBrush(Qt::white);
         painter.drawEllipse(m_tiles[i]->Center(), m_size / 3, m_size / 3);
 
-        int len = m_size / 2;
-        QFont font("微软雅黑");
+        double len = m_size / 2;
+        QFont font("Arial");
         font.setPixelSize(m_size / 2 / 4 * 3);
         painter.setFont(font);
-        painter.drawText(m_tiles[i]->Center().x() - len / 2, m_tiles[i]->Center().y() - len / 2, len, len, Qt::AlignCenter, QString::number(number));
+        painter.drawText(QRectF(m_tiles[i]->Center().x() - len / 2, m_tiles[i]->Center().y() - len / 2, len, len), Qt::AlignCenter, QString::number(num));
 
-        painter.setPen(QPen(Qt::black, 1));
+        painter.setPen(Qt::black);
     }
 
     for (int i = 0; i < Const::ROAD_COUNT; i++)
@@ -160,6 +133,7 @@ void MapWidget::leaveEvent(QEvent* event)
 void MapWidget::mouseMoveEvent(QMouseEvent* event)
 {
     bool hovered = false;
+    if (!m_loaded) return;
 
     for (int i = 0; i < Const::ROAD_COUNT; i++)
         if (!m_roads[i]->IsBuilt())
@@ -196,6 +170,8 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event)
 
 void MapWidget::mousePressEvent(QMouseEvent* event)
 {
+    if (!m_loaded) return;
+
     if (m_current_building == Building::RoadType)
     {
         for (int i = 0; i < Const::ROAD_COUNT; i++)
@@ -219,10 +195,14 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
     QWidget::mouseMoveEvent(event);
 }
 
+
+
 void MapWidget::buildTiles()
 {
     m_center = QPointF(this->width() / 2, this->height() / 2);
     m_size = min(this->height() / 8.0, this->width() / 5 / Const::SQRT3) * 0.85;
+
+    if (!m_loaded) return;
 
     m_tiles[0]->SetGeometry(m_center + QPointF(-1 * Const::SQRT3 * m_size, -3 * m_size), m_size);
     m_tiles[1]->SetGeometry(m_center + QPointF( 0 * Const::SQRT3 * m_size, -3 * m_size), m_size);
@@ -250,4 +230,50 @@ void MapWidget::buildTiles()
 
     /*for (int i = 0; i < Const::CITY_COUNT; i++)
         if (m_cities[i]) qDebug()<<i<<' '<<m_cities[i]->Point()<<' '<<m_cities[i]->State();*/
+}
+
+void MapWidget::Load(Const::Resource type[], int num[])
+{
+    m_loaded = true;
+    for (int i = 0; i < Const::TILE_COUNT; i++)
+        m_tiles[i] = new Tile(type[i], num[i]);
+
+    buildTiles();
+    for (int i = 0, t = 0; i < Const::TILE_COUNT; i++)
+    {
+        for (int j = 0; j < 6; j++)
+        {
+            City* city = nullptr;
+            for (int k = 0; k < t; k++)
+                if (m_cities[k]->Distance2(m_tiles[i]->Polygon()[j]) < Const::EPS) city = m_cities[k];
+            //qDebug()<<i<<' '<<j<<' '<<city<<' '<<n<<' '<<m_tiles[i]->Polygon()[j];
+            if (city == nullptr)
+            {
+                city = new City(m_tiles[i]->Polygon()[j]);
+                m_cities[t++] = city;
+            }
+            m_tiles[i]->SetCity(j, city);
+        }
+    }
+
+    for (int i = 0, t = 0; i < Const::CITY_COUNT; i++)
+        for (int j = i + 1; j < Const::CITY_COUNT; j++)
+            if (m_cities[i]->Distance2(m_cities[j]->Point()) - Const::Sqr(m_size) < Const::EPS)
+            {
+                m_roads[t] = new Road(m_cities[i], m_cities[j]);
+                m_cities[i]->AddRoad(m_roads[t]);
+                m_cities[j]->AddRoad(m_roads[t]);
+                t++;
+            }
+}
+
+void MapWidget::ObtainResources(int num)
+{
+    for (int i = 0; i < Const::TILE_COUNT; i++)
+        if (m_tiles[i]->Number() == num)
+        {
+            for (int j = 0; j < 6; j++)
+                if (m_tiles[i]->CityAt(j)->OwnerId() == Player::Self()->Id())
+                    Player::Self()->ObtainResources(m_tiles[i]->Type(), m_tiles[i]->CityAt(j)->Type() == Building::CityType ? 2 : 1);
+        }
 }

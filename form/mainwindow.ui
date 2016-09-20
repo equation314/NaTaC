@@ -14,7 +14,7 @@
    <string>NaTaC</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font-family:&quot;微软雅黑&quot;;</string>
+   <string notr="true">font-family:&quot;Arial&quot;;</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -29,7 +29,7 @@
          <widget class="QLabel" name="label_6">
           <property name="font">
            <font>
-            <family>微软雅黑</family>
+            <family>Arial</family>
             <pointsize>15</pointsize>
            </font>
           </property>
@@ -51,7 +51,7 @@
           </property>
           <property name="font">
            <font>
-            <family>微软雅黑</family>
+            <family>Arial</family>
             <pointsize>15</pointsize>
            </font>
           </property>
@@ -115,7 +115,7 @@
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">background:rgb(180, 56, 1)</string>
+              <string notr="true">background:rgb(180, 56, 1);</string>
              </property>
              <property name="text">
               <string>0</string>
@@ -239,7 +239,7 @@
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">background:rgb(108, 108, 108)</string>
+              <string notr="true">background:rgb(108, 108, 108);</string>
              </property>
              <property name="text">
               <string>0</string>
@@ -252,12 +252,9 @@
           </layout>
          </item>
          <item alignment="Qt::AlignHCenter">
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <widget class="QPushButton" name="pushButton_trade">
+           <property name="enabled">
+            <bool>false</bool>
            </property>
            <property name="text">
             <string>&amp;Trade</string>
@@ -290,6 +287,9 @@
          </property>
          <item row="0" column="1">
           <widget class="QPushButton" name="pushButton_village">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -353,6 +353,9 @@
          </item>
          <item row="0" column="3">
           <widget class="QPushButton" name="pushButton_city">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -400,6 +403,9 @@
          </item>
          <item row="0" column="0">
           <widget class="QPushButton" name="pushButton_road">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -461,24 +467,14 @@
          </property>
          <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="pushButton_dev">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>50</height>
-            </size>
+           <property name="enabled">
+            <bool>false</bool>
            </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#83ff1d;&quot;&gt;wool&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;grain&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#6c6c6c;&quot;&gt;ore&lt;/span&gt; x1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
-            <string>Development 
-&amp;Card</string>
+            <string>Dev. &amp;Card</string>
            </property>
           </widget>
          </item>
@@ -548,7 +544,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="pushButton_send">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -566,6 +562,16 @@
           </layout>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_finish">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>&amp;Finish Round</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -681,6 +687,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_dice">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -728,7 +737,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

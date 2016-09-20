@@ -3,24 +3,11 @@
 
 #include <QDebug>
 
-Tile::Tile(int number) :
-    m_number(number)
+Tile::Tile(Const::Resource type, int num) :
+    m_type(type), m_number(num)
 {
-    for (int i = 0; i < 6; i++)
-        m_cities[i] = nullptr;
+    memset(m_cities, 0, sizeof(m_cities));
 }
-/*
-Tile::Tile(double x, double y, double size) :
-    m_center(x, y), m_size(size)
-{
-    buildPolygon();
-}
-
-Tile::Tile(const QPointF& center, double size) :
-    m_center(center), m_size(size)
-{
-    buildPolygon();
-}*/
 
 void Tile::SetGeometry(const QPointF &center, double size)
 {
@@ -31,7 +18,6 @@ void Tile::SetGeometry(const QPointF &center, double size)
 
 void Tile::buildPolygon()
 {
-    m_color = QColor(255, 217, 85);
     m_polygon.clear();
     m_polygon << m_center + QPointF(0, -m_size)
               << m_center + QPointF(-m_size * Const::SQRT3/ 2, -m_size / 2)

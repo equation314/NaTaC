@@ -9,25 +9,26 @@
 class Tile
 {
 public:
-    Tile(int number);
+    Tile(Const::Resource type, int num);
     //Tile(double x, double y, double size);
     //Tile(const QPointF& center, double size);
 
     // Getter member functions
     int Number() const { return m_number; }
-    QColor Color() const { return m_color; }
+    Const::Resource Type() const { return m_type; }
+    QColor Color() const { return Const::RESOURCE_COLOR[m_type]; }
     QPointF Center() const { return m_center;}
     QPolygonF Polygon() const { return m_polygon; }
+    City* CityAt(int p) const { return m_cities[p]; }
 
     // Setter member functions
     void SetCity(int p, City* city) { m_cities[p] = city; }
     void SetGeometry(const QPointF& center, double size);
-    void SetColor(const QColor& color) { m_color = color; }
 
 private:
     QPointF m_center;
     QPolygonF m_polygon;
-    QColor m_color;
+    Const::Resource m_type;
     int m_number;
     double m_size; /// Side length of the hexagonal tile
     City* m_cities[6];

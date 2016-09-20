@@ -17,39 +17,29 @@ MainWindow::MainWindow(QWidget *parent) :
     Player::SetCurrentPlayerId(0);
     updateResource();
 
+    loadMap();
+
     connect(ui->widget_map, &MapWidget::buildingBuilt, this, &MainWindow::onBuildingBuilt);
-    connect(&m_dice_timer, &QTimer::timeout, this, [this]()
-    {
-        m_dice_time_elapsed += 10;
-        bool ok;
-        if (m_dice_time_elapsed <= 500)
-            ok = true;
-        else if (m_dice_time_elapsed <= 1000)
-            ok = m_dice_time_elapsed % 50 == 0;
-        else if (m_dice_time_elapsed <= 2000)
-            ok = m_dice_time_elapsed % 100 == 0;
-        else
-            ok = m_dice_time_elapsed % 200 == 0;
-        //qDebug()<<m_dice_time_elapsed<<' '<<ok;
-        if (ok)
-        {
-            int x = rand() % 6 + 1, y = rand() % 6 + 1;
-            ui->label_dice_1->setPixmap(QString(":/img/img/%1.png").arg(x));
-            ui->label_dice_2->setPixmap(QString(":/img/img/%1.png").arg(y));
-            m_current_number = x + y;
-        }
-        if (m_dice_time_elapsed >= 3000)
-        {
-            m_dice_timer.stop();
-            m_dice_time_elapsed = 0;
-            emit onDiceFinished();
-        }
-    });
+    connect(&m_dice_timer, &QTimer::timeout, this, &MainWindow::onDiceTimerTimout);
+    connect(Player::Self(), &Player::ready, this, &MainWindow::on_pushButton_finish_clicked);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::loadMap()
+{
+    Const::Resource type[Const::TILE_COUNT];
+    int num[Const::TILE_COUNT] = {0};
+
+    for (int i = 0; i < Const::TILE_COUNT; i++)
+    {
+        type[i] = Const::Resource(rand() % 6);
+        if (type[i] != Const::Desert) num[i] = rand()%3+6;//rand() % 12 + 1;
+    }
+    ui->widget_map->Load(type, num);
 }
 
 void MainWindow::updateResource()
@@ -95,14 +85,43 @@ void MainWindow::updateResource()
     }
 }
 
-
+void MainWindow::onDiceTimerTimout()
+{
+    m_dice_time_elapsed += 10;
+    bool ok;
+    if (m_dice_time_elapsed <= 500)
+        ok = true;
+    else if (m_dice_time_elapsed <= 1000)
+        ok = m_dice_time_elapsed % 50 == 0;
+    else if (m_dice_time_elapsed <= 2000)
+        ok = m_dice_time_elapsed % 100 == 0;
+    else
+        ok = m_dice_time_elapsed % 200 == 0;
+    if (ok)
+    {
+        int x = rand() % 6 + 1, y = rand() % 6 + 1;
+        ui->label_dice_1->setPixmap(QString(":/img/img/%1.png").arg(x));
+        ui->label_dice_2->setPixmap(QString(":/img/img/%1.png").arg(y));
+        m_current_number = x + y;
+    }
+    if (m_dice_time_elapsed >= 3000)
+    {
+        m_dice_timer.stop();
+        m_dice_time_elapsed = 0;
+        emit onDiceFinished();
+    }
+}
 
 void MainWindow::onDiceFinished()
 {
     qDebug()<<m_current_number;
+    ui->widget_map->ObtainResources(m_current_number);
+    ui->pushButton_trade->setEnabled(true);
+    ui->pushButton_finish->setEnabled(true);
+    updateResource();
 }
 
-void MainWindow::onBuildingBuilt(Building* building, int id)
+void MainWindow::onBuildingBuilt(Building* /*building*/, int /*id*/)
 {
     updateResource();
 
@@ -156,4 +175,20 @@ void MainWindow::on_pushButton_dev_clicked()
 void MainWindow::on_pushButton_dice_clicked()
 {
     m_dice_timer.start(10);
+    ui->pushButton_dice->setEnabled(false);
+}
+
+void MainWindow::on_pushButton_finish_clicked()
+{
+    ui->widget_map->SetCurrentBuilding(Building::NoneType);
+    ui->pushButton_road->setEnabled(false);
+    ui->pushButton_village->setEnabled(false);
+    ui->pushButton_city->setEnabled(false);
+    ui->pushButton_dev->setEnabled(false);
+    ui->pushButton_trade->setEnabled(false);
+    ui->pushButton_dice->setEnabled(true);
+    ui->pushButton_finish->setEnabled(false);
+    ui->pushButton_road->setChecked(false);
+    ui->pushButton_village->setChecked(false);
+    ui->pushButton_city->setChecked(false);
 }
