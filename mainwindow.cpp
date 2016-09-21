@@ -1,5 +1,6 @@
 #include "player.h"
 #include "mainwindow.h"
+#include "tradedialog.h"
 #include "ui_mainwindow.h"
 
 #include <QPainter>
@@ -128,7 +129,7 @@ void MainWindow::onDiceFinished()
     qDebug()<<m_current_number;
     sendMessage(tr(" rolled the number <strong>%1</strong>.").arg(m_current_number));
     ui->widget_map->ObtainResources(m_current_number);
-    ui->pushButton_trade->setEnabled(true);
+    ui->pushButton_trade->setEnabled(Player::Self()->ResourceCount());
     ui->pushButton_finish->setEnabled(true);
     updateResource();
 }
@@ -141,7 +142,7 @@ void MainWindow::onObtainedResources(int cnt[])
         if (cnt[i])
         {
             ok = true;
-            message += QString("<span style=\"color:%1\">%2</span> x%3, ").arg(Const::RESOURCE_COLOR[i].name()).arg(Const::RESOURCE_NAME[i]).arg(cnt[i]);
+            message += QString("<span style=\"color:%1\">%2</span> x %3, ").arg(Const::RESOURCE_COLOR[i].name()).arg(Const::RESOURCE_NAME[i]).arg(cnt[i]);
         }
     message.replace(message.length() - 2, 2, ".");
     if (ok) sendMessage(message);
@@ -207,6 +208,15 @@ void MainWindow::on_pushButton_city_clicked(bool checked)
         ui->widget_map->SetCurrentBuilding(Building::CityType);
         ui->pushButton_road->setChecked(false);
         ui->pushButton_village->setChecked(false);
+    }
+}
+
+void MainWindow::on_pushButton_trade_clicked()
+{
+    TradeDialog dialog(Player::Self(), this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+
     }
 }
 

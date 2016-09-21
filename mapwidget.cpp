@@ -31,7 +31,6 @@ MapWidget::~MapWidget()
 
 void MapWidget::resizeEvent(QResizeEvent* event)
 {
-    //qDebug()<<' '<<this->visibleRegion();
     buildTiles();
     QWidget::resizeEvent(event);
 }

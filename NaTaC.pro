@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     road.cpp \
     building.cpp \
     city.cpp \
-    player.cpp
+    player.cpp \
+    tradedialog.cpp
 
 HEADERS  += mainwindow.h \
     mapwidget.h \
@@ -30,9 +31,11 @@ HEADERS  += mainwindow.h \
     road.h \
     building.h \
     city.h \
-    player.h
+    player.h \
+    tradedialog.h
 
-FORMS    += form/mainwindow.ui
+FORMS    += form/mainwindow.ui \
+    form/tradedialog.ui
 
 RESOURCES += \
     resource/res.qrc

@@ -5,7 +5,7 @@ Player* Player::s_self = nullptr;
 int Player::s_current_player_id = -1;
 
 Player::Player(int id, const QString& name) :
-    m_id(id), m_name(name), m_road_count(0), m_village_count(0), m_city_count(0), m_score(0), m_is_ready(false)
+    m_id(id), m_name(name), m_road_count(0), m_village_count(0), m_city_count(0), m_resource_count(0), m_score(0), m_is_ready(false)
 {
     memset(m_resources, 0, sizeof(m_resources));
 }
@@ -70,11 +70,20 @@ void Player::Build(Building* building)
         for (int i = 0; i < Const::RESOURCE_COUNT; i++)
         {
             if (building->Type() == Building::RoadType)
+            {
                 m_resources[i] -= Const::DEPEND[0][i];
+                m_resource_count -= Const::DEPEND[0][i];
+            }
             else if (building->Type() == Building::VillageType)
+            {
                 m_resources[i] -= Const::DEPEND[1][i];
+                m_resource_count -= Const::DEPEND[1][i];
+            }
             else if (building->Type() == Building::CityType)
+            {
                 m_resources[i] -= Const::DEPEND[2][i];
+                m_resource_count -= Const::DEPEND[2][i];
+            }
         }
     }
 }
@@ -82,5 +91,8 @@ void Player::Build(Building* building)
 void Player::BuyDevelopmentCard()
 {
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)
+    {
         m_resources[i] -= Const::DEPEND[3][i];
+        m_resource_count -= Const::DEPEND[3][i];
+    }
 }
