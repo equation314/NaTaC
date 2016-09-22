@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>340</width>
-    <height>153</height>
+    <width>492</width>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,10 +68,16 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="ResourceTable" name="resourceTable_1"/>
+     </item>
+     <item>
       <widget class="QComboBox" name="comboBox_1"/>
      </item>
      <item>
       <widget class="QSpinBox" name="spinBox_1">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
        <property name="prefix">
         <string>x </string>
        </property>
@@ -126,10 +132,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_2"/>
-     </item>
-     <item>
       <widget class="QSpinBox" name="spinBox_2">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
        <property name="prefix">
         <string>x </string>
        </property>
@@ -140,6 +146,12 @@
         <number>9</number>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_2"/>
+     </item>
+     <item>
+      <widget class="ResourceTable" name="resourceTable_2"/>
      </item>
     </layout>
    </item>
@@ -167,10 +179,20 @@
      <property name="text">
       <string>Trade</string>
      </property>
+     <property name="default">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ResourceTable</class>
+   <extends>QTableView</extends>
+   <header>resourcetable.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resource/res.qrc"/>
  </resources>

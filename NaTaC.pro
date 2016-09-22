@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     building.cpp \
     city.cpp \
     player.cpp \
-    tradedialog.cpp
+    tradedialog.cpp \
+    resourcetable.cpp
 
 HEADERS  += mainwindow.h \
     mapwidget.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     building.h \
     city.h \
     player.h \
-    tradedialog.h
+    tradedialog.h \
+    resourcetable.h
 
 FORMS    += form/mainwindow.ui \
     form/tradedialog.ui

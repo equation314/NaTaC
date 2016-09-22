@@ -584,7 +584,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_1">
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0" rowspan="2">
          <widget class="MapWidget" name="widget_map" native="true">
@@ -711,9 +711,6 @@
                <string>&amp;Roll the Dice!</string>
               </property>
               <property name="autoDefault">
-               <bool>true</bool>
-              </property>
-              <property name="default">
                <bool>true</bool>
               </property>
              </widget>
