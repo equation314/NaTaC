@@ -12,31 +12,31 @@ Player::Player(int id, const QString& name) :
 
 bool Player::CanbuildRoad() const
 {
-    if (m_road_count < Const::INITIAL_ROAD_COUNT) return true;
+    if (m_road_count < Const::INITIAL_ROAD_COUNT && m_road_count == m_village_count - 1) return true;
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)
-        if (m_resources[i] < Const::DEPEND[0][i]) return false;
+        if (m_resources[i] < Const::COST[0][i]) return false;
     return true;
 }
 
 bool Player::CanbuildVillage() const
 {
-    if (m_village_count < Const::INITIAL_CITY_COUNT && !m_city_count) return true;
+    if (m_village_count < Const::INITIAL_CITY_COUNT && m_village_count == m_road_count && !m_city_count) return true;
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)
-        if (m_resources[i] < Const::DEPEND[1][i]) return false;
+        if (m_resources[i] < Const::COST[1][i]) return false;
     return true;
 }
 
 bool Player::CanbuildCity() const
 {
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)
-        if (m_resources[i] < Const::DEPEND[2][i]) return false;
+        if (m_resources[i] < Const::COST[2][i]) return false;
     return true;
 }
 
 bool Player::CanUseDevelopmentCard() const
 {
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)
-        if (m_resources[i] < Const::DEPEND[3][i]) return false;
+        if (m_resources[i] < Const::COST[3][i]) return false;
     return true;
 }
 
@@ -70,11 +70,11 @@ void Player::Build(Building* building)
         for (int i = 0; i < Const::RESOURCE_COUNT; i++)
         {
             if (building->Type() == Building::RoadType)
-                m_resources[i] -= Const::DEPEND[0][i];
+                m_resources[i] -= Const::COST[0][i];
             else if (building->Type() == Building::VillageType)
-                m_resources[i] -= Const::DEPEND[1][i];
+                m_resources[i] -= Const::COST[1][i];
             else if (building->Type() == Building::CityType)
-                m_resources[i] -= Const::DEPEND[2][i];
+                m_resources[i] -= Const::COST[2][i];
         }
     }
 }
@@ -82,5 +82,5 @@ void Player::Build(Building* building)
 void Player::BuyDevelopmentCard()
 {
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)
-        m_resources[i] -= Const::DEPEND[3][i];
+        m_resources[i] -= Const::COST[3][i];
 }

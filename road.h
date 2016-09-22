@@ -21,12 +21,9 @@ public:
     QPointF StartPoint() const { return m_start->Point(); }
     QPointF EndPoint() const { return m_end->Point(); }
 
-    // Setter member functions
-
     bool CanPlace() const override;
     BuildingClass Class() const override { return RoadClass; }
     bool Contains(const QPointF& point, double length) const override;
-
 
 private:
     City *m_start, *m_end;

@@ -4,9 +4,10 @@
 #include <QDebug>
 
 City::City(const QPointF& point) :
-    m_point(point), m_road_count(0)
+    m_point(point), m_tile_count(0), m_road_count(0)
 {
-
+    memset(m_tiles, 0, sizeof(m_tiles));
+    memset(m_roads, 0, sizeof(m_roads));
 }
 
 bool City::CanPlace() const

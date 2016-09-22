@@ -135,6 +135,8 @@ void MainWindow::onDiceFinished()
 
 void MainWindow::onObtainedResources(int cnt[])
 {
+    updateResource();
+
     bool ok = false;
     QString message = tr(" obtained ");
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)

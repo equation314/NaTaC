@@ -193,6 +193,20 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
             {
                 m_cities[i]->Build();
                 emit buildingBuilt(m_cities[i], i);
+                if (m_cities[i]->Type() == Building::VillageType && Player::Self()->VillageCount() == Const::INITIAL_CITY_COUNT)
+                {
+                    int cnt[Const::RESOURCE_COUNT] = {0};
+                    for (int j = 0; j < m_cities[i]->TiteCount(); j++)
+                    {
+                        Const::Resource res = m_cities[i]->TileAt(j)->Type();
+                        if (res != Const::Desert)
+                        {
+                            Player::Self()->ObtainResources(res, 1);
+                            cnt[(size_t)res]++;
+                        }
+                    }
+                    emit obtainedResources(cnt);
+                }
             }
     }
     this->update();
@@ -257,6 +271,7 @@ void MapWidget::Load(Const::Resource type[], int num[])
                 m_cities[t++] = city;
             }
             m_tiles[i]->SetCity(j, city);
+            city->AddTile(m_tiles[i]);
         }
     }
 

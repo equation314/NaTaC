@@ -29,10 +29,10 @@ const int RESOURCE_COUNT = 5;
 const int INITIAL_ROAD_COUNT = 2;
 const int INITIAL_CITY_COUNT = 2;
 
-const int DEPEND[4][RESOURCE_COUNT] =
+const int COST[4][RESOURCE_COUNT] =
 {
     {1, 1, 0, 0, 0},
-    {1, 1, 0, 1, 1},
+    {1, 1, 1, 1, 0},
     {0, 0, 0, 2, 3},
     {0, 0, 1, 1, 1},
 };
