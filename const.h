@@ -39,7 +39,7 @@ const int DEPEND[4][RESOURCE_COUNT] =
 
 inline double Sqr(double x) { return x * x; }
 
-const QList<QColor> PLAYER_COLOR =
+const QColor PLAYER_COLOR[] =
 {
     Qt::blue,
     Qt::green,
@@ -49,7 +49,7 @@ const QList<QColor> PLAYER_COLOR =
     Qt::gray,
 };
 
-const QList<QColor> RESOURCE_COLOR =
+const QColor RESOURCE_COLOR[] =
 {
     QColor(180, 56, 1),
     QColor(0, 168, 0),
@@ -59,7 +59,7 @@ const QList<QColor> RESOURCE_COLOR =
     QColor(255, 217, 85),
 };
 
-const QStringList RESOURCE_NAME =
+const QString RESOURCE_NAME[] =
 {
     QObject::tr("brick"),
     QObject::tr("lumber"),

@@ -144,7 +144,7 @@ void MainWindow::onObtainedResources(int cnt[])
             ok = true;
             message += QString("<span style=\"color:%1\">%2</span> x %3, ").arg(Const::RESOURCE_COLOR[i].name()).arg(Const::RESOURCE_NAME[i]).arg(cnt[i]);
         }
-    message.replace(message.length() - 2, 2, ".");
+    message.replace(message.length() - 2, 2, tr("."));
     if (ok) sendMessage(message);
 }
 
@@ -155,7 +155,7 @@ void MainWindow::onBuildingBuilt(Building* building, int /*id*/)
     ui->label_road_count->setText(QString::number(Player::Self()->RoadCount()));
     ui->label_village_count->setText(QString::number(Player::Self()->VillageCount()));
     ui->label_city_count->setText(QString::number(Player::Self()->CityCount()));
-    ui->label_score->setText(QString::number(Player::Self()->Score()));
+    ui->lcdNumber_score->display(Player::Self()->Score());
 
     switch (building->Type())
     {
@@ -214,10 +214,23 @@ void MainWindow::on_pushButton_city_clicked(bool checked)
 void MainWindow::on_pushButton_trade_clicked()
 {
     TradeDialog dialog(Player::Self(), this);
-    if (dialog.exec() == QDialog::Accepted)
-    {
+    if (dialog.exec() != QDialog::Accepted) return;
 
-    }
+    for (int i = 0; i < Const::RESOURCE_COUNT; i++)
+        Player::Self()->ObtainResources((Const::Resource)i, dialog.InResourceAt(i) - dialog.OutResourceAt(i));
+
+    QString message = tr(" exchanged ");
+    for (int i = 0; i < Const::RESOURCE_COUNT; i++)
+        if (dialog.OutResourceAt(i))
+            message += QString("<span style=\"color:%1\">%2</span> x %3, ").arg(Const::RESOURCE_COLOR[i].name()).arg(Const::RESOURCE_NAME[i]).arg(dialog.OutResourceAt(i));
+    message.replace(message.length() - 2, 2, tr(" for %1's ").arg(dialog.TraderName()));
+    for (int i = 0; i < Const::RESOURCE_COUNT; i++)
+        if (dialog.InResourceAt(i))
+            message += QString("<span style=\"color:%1\">%2</span> x %3, ").arg(Const::RESOURCE_COLOR[i].name()).arg(Const::RESOURCE_NAME[i]).arg(dialog.InResourceAt(i));
+    message.replace(message.length() - 2, 2, tr("."));
+    sendMessage(message);
+
+    updateResource();
 }
 
 void MainWindow::on_pushButton_dev_clicked()

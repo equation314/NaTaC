@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
+    <width>432</width>
     <height>175</height>
    </rect>
   </property>
@@ -74,18 +74,12 @@
       <widget class="QComboBox" name="comboBox_1"/>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_1">
-       <property name="readOnly">
-        <bool>true</bool>
+      <widget class="QLabel" name="label_amount_1">
+       <property name="text">
+        <string>x 1</string>
        </property>
-       <property name="prefix">
-        <string>x </string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>9</number>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -132,23 +126,17 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox_2">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="prefix">
-        <string>x </string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>9</number>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="comboBox_2"/>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QLabel" name="label_amount_2">
+       <property name="text">
+        <string>x 1</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="ResourceTable" name="resourceTable_2"/>

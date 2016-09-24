@@ -19,6 +19,9 @@ public:
     explicit TradeDialog(Player* player, QWidget* parent = nullptr);
     ~TradeDialog();
 
+    QString TraderName() const { return m_trader_name; }
+    int InResourceAt(int p) const { return m_in[p]; }
+    int OutResourceAt(int p) const { return m_out[p]; }
 
 private slots:
     void on_comboBox_user_currentIndexChanged(int index);
@@ -29,8 +32,11 @@ private slots:
 private:
     Ui::TradeDialog *ui;
     Player* m_player;
+    QString m_trader_name;
+    int m_in[Const::RESOURCE_COUNT];
+    int m_out[Const::RESOURCE_COUNT];
 
-    QListWidget *list_user, *list_1, *list_2;
+    QListWidget *m_listWidget_user, *m_listWidget_1, *m_listWidget_2;
     QList<Player*> m_user_list;
     QList<std::tuple<QString, int, int>> m_port_list;
 
