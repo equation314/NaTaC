@@ -27,6 +27,7 @@ public:
     int RoadCount() const { return m_road_count; }
     int VillageCount() const { return m_village_count; }
     int CityCount() const { return m_city_count; }
+    int ResourceCount() const { return m_resource_count; }
     int ResourceAt(int i) const { return m_resources[i]; }
     QColor Color() const { return Const::PLAYER_COLOR[m_id]; }
     bool isReady() const { return m_is_ready; }
@@ -38,7 +39,11 @@ public:
 
     void Build(Building* building);
     void BuyDevelopmentCard();
-    void ObtainResources(Const::Resource type, int num) { m_resources[(size_t)type] += num; }
+    void ObtainResources(Const::Resource type, int num)
+    {
+        m_resources[(size_t)type] += num;
+        m_resource_count += num;
+    }
 
 private:
     static Player* s_self;
@@ -46,7 +51,7 @@ private:
 
     int m_id;
     QString m_name;
-    int m_road_count, m_village_count, m_city_count, m_score;
+    int m_road_count, m_village_count, m_city_count, m_resource_count, m_score;
     int m_resources[Const::RESOURCE_COUNT];
     bool m_is_ready;
 

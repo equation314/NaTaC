@@ -28,6 +28,7 @@ private slots:
     void on_pushButton_road_clicked(bool checked);
     void on_pushButton_village_clicked(bool checked);
     void on_pushButton_city_clicked(bool checked);
+    void on_pushButton_trade_clicked();
     void on_pushButton_dev_clicked();
     void on_pushButton_dice_clicked();
     void on_pushButton_finish_clicked();

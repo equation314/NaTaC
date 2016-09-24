@@ -50,27 +50,27 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_score">
-            <property name="maximumSize">
+           <widget class="QLCDNumber" name="lcdNumber_score">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
              <size>
-              <width>60</width>
-              <height>16777215</height>
+              <width>64</width>
+              <height>32</height>
              </size>
             </property>
-            <property name="font">
-             <font>
-              <family>Arial</family>
-              <pointsize>15</pointsize>
-             </font>
-            </property>
             <property name="frameShape">
-             <enum>QFrame::Box</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
-            <property name="text">
-             <string>0</string>
+            <property name="digitCount">
+             <number>2</number>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
             </property>
            </widget>
           </item>
@@ -317,7 +317,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#b43801;&quot;&gt;brick&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#00a800;&quot;&gt;lumber&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#83ff1d;&quot;&gt;wool&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;grain&lt;/span&gt; x1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#b43801;&quot;&gt;brick&lt;/span&gt; x 1&lt;br/&gt;&lt;span style=&quot; color:#00a800;&quot;&gt;lumber&lt;/span&gt; x 1&lt;br/&gt;&lt;span style=&quot; color:#83ff1d;&quot;&gt;wool&lt;/span&gt; x 1&lt;br/&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;grain&lt;/span&gt; x 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;Village</string>
@@ -383,7 +383,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;grain&lt;/span&gt; x2&lt;br/&gt;&lt;span style=&quot; color:#6c6c6c;&quot;&gt;ore&lt;/span&gt; x3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;grain&lt;/span&gt; x 2&lt;br/&gt;&lt;span style=&quot; color:#6c6c6c;&quot;&gt;ore&lt;/span&gt; x 3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;City</string>
@@ -433,7 +433,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#b43801;&quot;&gt;brick&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#00a800;&quot;&gt;lumber&lt;/span&gt; x1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#b43801;&quot;&gt;brick&lt;/span&gt; x 1&lt;br/&gt;&lt;span style=&quot; color:#00a800;&quot;&gt;lumber&lt;/span&gt; x 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>&amp;Road</string>
@@ -479,7 +479,7 @@
               <bool>false</bool>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#83ff1d;&quot;&gt;wool&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;grain&lt;/span&gt; x1&lt;br/&gt;&lt;span style=&quot; color:#6c6c6c;&quot;&gt;ore&lt;/span&gt; x1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#83ff1d;&quot;&gt;wool&lt;/span&gt; x 1&lt;br/&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;grain&lt;/span&gt; x 1&lt;br/&gt;&lt;span style=&quot; color:#6c6c6c;&quot;&gt;ore&lt;/span&gt; x 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Dev. &amp;Card</string>
@@ -584,7 +584,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_1">
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0" rowspan="2">
          <widget class="MapWidget" name="widget_map" native="true">
@@ -711,9 +711,6 @@
                <string>&amp;Roll the Dice!</string>
               </property>
               <property name="autoDefault">
-               <bool>true</bool>
-              </property>
-              <property name="default">
                <bool>true</bool>
               </property>
              </widget>
