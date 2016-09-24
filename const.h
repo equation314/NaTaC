@@ -18,6 +18,15 @@ enum Resource
     Desert,
 };
 
+enum DevelopmentCardType
+{
+    SoldierCard,
+    PointCard,
+    RoadsCard,
+    MonopolyCard,
+    HarvestCard,
+};
+
 const double SQRT3 = sqrt(3);
 const double EPS = 1e-6;
 const double PI = acos(-1);
@@ -67,6 +76,15 @@ const QString RESOURCE_NAME[] =
     QObject::tr("grain"),
     QObject::tr("ore"),
     QObject::tr("desert"),
+};
+
+const QString DEV_CARD_NAME[] =
+{
+    QObject::tr("Soldier Card"),
+    QObject::tr("1 victory point"),
+    QObject::tr("Roads Card"),
+    QObject::tr("Monopoly Card"),
+    QObject::tr("Harvest Card"),
 };
 
 }

@@ -11,6 +11,7 @@ TradeDialog::TradeDialog(Player* player, QWidget* parent) :
 {
     ui->setupUi(this);
     ui->label_user->setText(player->ColorName());
+    this->setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
 
     m_listWidget_user = new QListWidget(ui->comboBox_user);
     m_listWidget_1 = new QListWidget(ui->comboBox_1);

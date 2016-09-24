@@ -37,6 +37,7 @@ public:
     bool CanbuildCity() const;
     bool CanUseDevelopmentCard() const;
 
+    void AddScore(int score) { m_score += score; }
     void Build(Building* building);
     void BuyDevelopmentCard();
     void ObtainResources(Const::Resource type, int num)

@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     city.cpp \
     player.cpp \
     tradedialog.cpp \
-    resourcetable.cpp
+    resourcetable.cpp \
+    devlopmentcarddialog.cpp
 
 HEADERS  += mainwindow.h \
     mapwidget.h \
@@ -34,10 +35,12 @@ HEADERS  += mainwindow.h \
     city.h \
     player.h \
     tradedialog.h \
-    resourcetable.h
+    resourcetable.h \
+    devlopmentcarddialog.h
 
 FORMS    += form/mainwindow.ui \
-    form/tradedialog.ui
+    form/tradedialog.ui \
+    form/devlopmentcarddialog.ui
 
 RESOURCES += \
     resource/res.qrc

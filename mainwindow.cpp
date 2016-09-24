@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "tradedialog.h"
 #include "ui_mainwindow.h"
+#include "devlopmentcarddialog.h"
 
 #include <QPainter>
 #include <QMimeData>
@@ -9,7 +10,7 @@
 #include <QTime>
 #include <QDebug>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_dice_time_elapsed(0)
@@ -37,7 +38,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendMessage(const QString& message)
 {
-    QString text = QString("[%1]%2").arg(QTime::currentTime().toString("hh:mm:ss")).arg(Player::Self()->ColorName()) + message;
+    QString text = QString("[%1] %2").arg(QTime::currentTime().toString("hh:mm:ss")).arg(Player::Self()->ColorName()) + message;
     ui->textEdit->append(text);
 }
 
@@ -49,7 +50,7 @@ void MainWindow::loadMap()
     for (int i = 0; i < Const::TILE_COUNT; i++)
     {
         type[i] = Const::Resource(rand() % 6);
-        if (type[i] != Const::Desert) num[i] = rand()%3+6;//rand() % 12 + 1;
+        if (type[i] != Const::Desert) num[i] = rand() % 3 + 6; //rand() % 12 + 1; TODO: generate numbers according rules
     }
     ui->widget_map->Load(type, num);
 }
@@ -126,11 +127,13 @@ void MainWindow::onDiceTimerTimout()
 
 void MainWindow::onDiceFinished()
 {
-    qDebug()<<m_current_number;
+    qDebug() << m_current_number;
     sendMessage(tr(" rolled the number <strong>%1</strong>.").arg(m_current_number));
     ui->widget_map->ObtainResources(m_current_number);
     ui->pushButton_trade->setEnabled(Player::Self()->ResourceCount());
     ui->pushButton_finish->setEnabled(true);
+    ui->listWidget_card_held->setEnabled(true);
+
     updateResource();
 }
 
@@ -166,15 +169,36 @@ void MainWindow::onBuildingBuilt(Building* building, int /*id*/)
         break;
     case Building::VillageType:
         sendMessage(tr(" built a village."));
-        sendMessage(tr(" got 1 point."));
+        sendMessage(tr(" got 1 victory point."));
         break;
     case Building::CityType:
         sendMessage(tr(" upgraded a village to a city."));
-        sendMessage(tr(" got 1 point."));
+        sendMessage(tr(" got 1 victory point."));
         break;
     default:
         break;
     }
+}
+
+void MainWindow::onDevlopmentCardClick(int index, bool isUsed)
+{
+    QListWidgetItem* item = isUsed ? ui->listWidget_card_used->item(index) : ui->listWidget_card_held->item(index);
+    Const::DevelopmentCardType type = (Const::DevelopmentCardType)item->data(Qt::UserRole).toInt();
+    DevlopmentCardDialog dialog(type, item->flags() & Qt::ItemIsEnabled, this);
+    if (dialog.exec() != QDialog::Accepted || isUsed) return;
+
+    switch (type)
+    {
+    case Const::PointCard:
+        break;
+    default:
+        break;
+    }
+
+    sendMessage(tr(" used a %1.").arg(item->toolTip()));
+    item->setFlags(item->flags() ^ Qt::ItemIsEnabled);
+    ui->listWidget_card_held->takeItem(index);
+    ui->listWidget_card_used->addItem(item);
 }
 
 void MainWindow::on_pushButton_road_clicked(bool checked)
@@ -240,6 +264,27 @@ void MainWindow::on_pushButton_dev_clicked()
     sendMessage(tr(" bought a development card."));
     Player::Self()->BuyDevelopmentCard();
     updateResource();
+
+    int type = rand() % 5;  // TODO: get card from cards heap
+    QListWidgetItem* item = new QListWidgetItem;
+    item->setIcon(QIcon(QString(":/img/img/%1.png").arg(type + 1)));
+    item->setToolTip(Const::DEV_CARD_NAME[type]);
+    item->setData(Qt::UserRole, type);
+    item->setFlags(item->flags() ^ Qt::ItemIsEnabled);
+
+    if (type == Const::PointCard)
+    {
+        Player::Self()->AddScore(1);
+        sendMessage(tr(" got 1 victory point."));
+        ui->lcdNumber_score->display(Player::Self()->Score());
+        ui->listWidget_card_used->addItem(item);
+        onDevlopmentCardClick(ui->listWidget_card_used->count() - 1, true);
+    }
+    else
+    {
+        ui->listWidget_card_held->addItem(item);
+        onDevlopmentCardClick(ui->listWidget_card_held->count() - 1);
+    }
 }
 
 void MainWindow::on_pushButton_dice_clicked()
@@ -258,9 +303,14 @@ void MainWindow::on_pushButton_finish_clicked()
     ui->pushButton_trade->setEnabled(false);
     ui->pushButton_dice->setEnabled(true);
     ui->pushButton_finish->setEnabled(false);
+    ui->listWidget_card_held->setEnabled(false);
+
     ui->pushButton_road->setChecked(false);
     ui->pushButton_village->setChecked(false);
     ui->pushButton_city->setChecked(false);
+
+    for (int i = 0; i < ui->listWidget_card_held->count(); i++)
+        ui->listWidget_card_held->item(i)->setFlags(ui->listWidget_card_held->item(i)->flags() | Qt::ItemIsEnabled);
 }
 
 void MainWindow::on_pushButton_send_clicked()
@@ -274,4 +324,14 @@ void MainWindow::on_pushButton_send_clicked()
 void MainWindow::on_lineEdit_returnPressed()
 {
     on_pushButton_send_clicked();
+}
+
+void MainWindow::on_listWidget_card_held_clicked(const QModelIndex& index)
+{
+    onDevlopmentCardClick(index.row());
+}
+
+void MainWindow::on_listWidget_card_used_clicked(const QModelIndex& index)
+{
+    onDevlopmentCardClick(index.row(), true);
 }
