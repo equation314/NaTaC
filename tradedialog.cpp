@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QMessageBox>
 
-TradeDialog::TradeDialog(Player* player, QWidget *parent) :
+TradeDialog::TradeDialog(Player* player, QWidget* parent) :
     QDialog(parent),
     ui(new Ui::TradeDialog),
     m_player(player)
@@ -17,10 +17,17 @@ TradeDialog::TradeDialog(Player* player, QWidget *parent) :
     list_2 = new QListWidget(ui->comboBox_2);
 
     m_user_list.append(Player::Self());
-    QListWidgetItem* item = new QListWidgetItem("Bank", list_user);
-    item->setData(Qt::UserRole, 0);
-    item->setTextColor(Qt::black);
-    list_user->addItem(item);
+    m_port_list.append(std::make_tuple(tr("Bank"), 4, -1));
+    m_port_list.append(std::make_tuple(tr("Port1"), 3, -1));
+    m_port_list.append(std::make_tuple(tr("Port2"), 2, (int)Const::Lumber));
+    for (int i = 0; i < m_port_list.size(); i++)
+    {
+        auto tuple = m_port_list[i];
+        QListWidgetItem* item = new QListWidgetItem(std::get<0>(tuple), list_user);
+        item->setData(Qt::UserRole, i);
+        item->setTextColor(Qt::black);
+        list_user->addItem(item);
+    }
     for (int i = 0; i < m_user_list.size(); i++)
     {
         Player* user = m_user_list[i];
@@ -31,10 +38,7 @@ TradeDialog::TradeDialog(Player* player, QWidget *parent) :
     }
 
     for (int i = 0 ; i < Const::RESOURCE_COUNT; i++)
-    {
-        addComboBoxItem(i, list_1);
         addComboBoxItem(i, list_2);
-    }
 
     ui->comboBox_user->setModel(list_user->model());
     ui->comboBox_1->setModel(list_1->model());
@@ -82,27 +86,38 @@ void TradeDialog::on_comboBox_user_currentIndexChanged(int /*index*/)
     {
         setResourceTableHidden(true);
         ui->comboBox_user->setStyleSheet("");
+        list_1->clear();
+        if (std::get<2>(m_port_list[id]) == -1)
+        {
+            for (int i = 0 ; i < Const::RESOURCE_COUNT; i++)
+                addComboBoxItem(i, list_1);
+        }
+        else
+            addComboBoxItem(std::get<2>(m_port_list[id]), list_1);
+
+        ui->comboBox_1->setCurrentIndex(-1);
+        ui->spinBox_1->setMaximum(std::get<1>(m_port_list[id]));
+        ui->spinBox_1->setValue(ui->spinBox_1->maximum());
     }
     else // users
     {
         setResourceTableHidden(false);
+        ui->comboBox_user->setStyleSheet("color:" + m_user_list[-id - 1]->Color().name());
         QList<QPair<int, int>> ranges;
         for (int i = 0; i < Const::RESOURCE_COUNT; i++)
             ranges.append(qMakePair(0, m_player->ResourceAt(i)));
         ui->resourceTable_1->SetRanges(ranges);
-        ui->comboBox_user->setStyleSheet("color:" + m_user_list[-id - 1]->Color().name());
     }
     ui->comboBox_1->setCurrentIndex(0);
     ui->comboBox_2->setCurrentIndex(0);
 }
 
-void TradeDialog::on_comboBox_1_currentIndexChanged(int /*index*/)
+void TradeDialog::on_comboBox_1_currentIndexChanged(int index)
 {
+    if (index < 0) return;
+
     int resId = ui->comboBox_1->currentData(Qt::UserRole).toInt();
     ui->comboBox_1->setStyleSheet("color:" + Const::RESOURCE_COLOR[resId].name());
-
-    ui->spinBox_1->setMaximum(4);
-    ui->spinBox_1->setValue(4);
 }
 
 void TradeDialog::on_comboBox_2_currentIndexChanged(int /*index*/)

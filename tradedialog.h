@@ -24,7 +24,6 @@ private slots:
     void on_comboBox_user_currentIndexChanged(int index);
     void on_comboBox_1_currentIndexChanged(int index);
     void on_comboBox_2_currentIndexChanged(int index);
-
     void on_pushButton_trade_clicked();
 
 private:
@@ -33,6 +32,7 @@ private:
 
     QListWidget *list_user, *list_1, *list_2;
     QList<Player*> m_user_list;
+    QList<std::tuple<QString, int, int>> m_port_list;
 
     void setResourceTableHidden(bool hidden);
     void addComboBoxItem(int id, QListWidget* list);
