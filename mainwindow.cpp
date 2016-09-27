@@ -49,7 +49,7 @@ void MainWindow::loadMap()
     for (int i = 0; i < Const::TILE_COUNT; i++)
     {
         type[i] = Const::Resource(rand() % 6);
-        if (type[i] != Const::Desert) num[i] = rand()%3+6;//rand() % 12 + 1;
+        if (type[i] != Const::Desert) num[i] = i % 11 + 2; //rand() % 12 + 1;// TODO: generate numbers according rules
     }
     ui->widget_map->Load(type, num);
 }

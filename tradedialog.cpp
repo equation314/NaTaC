@@ -18,8 +18,8 @@ TradeDialog::TradeDialog(Player* player, QWidget* parent) :
 
     m_user_list.append(Player::Self());
     m_port_list.append(std::make_tuple(tr("Bank"), 4, -1));
-    m_port_list.append(std::make_tuple(tr("Port1"), 3, -1));
-    m_port_list.append(std::make_tuple(tr("Port2"), 2, (int)Const::Lumber));
+    m_port_list.append(std::make_tuple(tr("Harbor1"), 3, -1));
+    m_port_list.append(std::make_tuple(tr("Harbor2"), 2, (int)Const::Lumber));
     for (int i = 0; i < m_port_list.size(); i++)
     {
         auto tuple = m_port_list[i];
