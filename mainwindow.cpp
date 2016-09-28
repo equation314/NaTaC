@@ -37,20 +37,23 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendMessage(const QString& message)
 {
-    QString text = QString("[%1]%2").arg(QTime::currentTime().toString("hh:mm:ss")).arg(Player::Self()->ColorName()) + message;
+    QString text = QString("[%1] %2").arg(QTime::currentTime().toString("hh:mm:ss")).arg(Player::Self()->ColorName()) + message;
     ui->textEdit->append(text);
 }
 
 void MainWindow::loadMap()
 {
     Const::Resource type[Const::TILE_COUNT];
-    int num[Const::TILE_COUNT] = {0};
+    int num[Const::TILE_COUNT];
 
-    for (int i = 0; i < Const::TILE_COUNT; i++)
-    {
-        type[i] = Const::Resource(rand() % 6);
-        if (type[i] != Const::Desert) num[i] = rand()%3+6;//rand() % 12 + 1;
-    }
+    memcpy(type, Const::TILE_RESOURCE_TYPE, sizeof(type));
+    memcpy(num, Const::TILE_NUMBER, sizeof(num));
+
+    int desert = rand() % Const::TILE_COUNT;
+    std::random_shuffle(type + 1, type + Const::TILE_COUNT);
+    std::random_shuffle(num + 1, num + Const::TILE_COUNT);
+    std::swap(type[0], type[desert]);
+    std::swap(num[0], num[desert]);
     ui->widget_map->Load(type, num);
 }
 

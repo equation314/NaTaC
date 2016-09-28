@@ -69,6 +69,30 @@ const QString RESOURCE_NAME[] =
     QObject::tr("desert"),
 };
 
+const Resource TILE_RESOURCE_TYPE[] =
+{
+    Desert,
+    Brick, Brick, Brick,
+    Lumber, Lumber, Lumber, Lumber,
+    Wool, Wool, Wool, Wool,
+    Grain, Grain, Grain, Grain,
+    Ore, Ore, Ore,
+};
+
+const int TILE_NUMBER[] =
+{
+    0, 2,
+    3, 3,
+    4, 4,
+    5, 5,
+    6, 6,
+    8, 8,
+    9, 9,
+    10, 10,
+    11, 11,
+    12,
+};
+
 }
 
 #endif // CONST_H

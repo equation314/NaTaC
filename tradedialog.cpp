@@ -17,12 +17,12 @@ TradeDialog::TradeDialog(Player* player, QWidget* parent) :
     m_listWidget_2 = new QListWidget(ui->comboBox_2);
 
     m_user_list.append(Player::Self());
-    m_port_list.append(std::make_tuple(tr("Bank"), 4, -1));
-    m_port_list.append(std::make_tuple(tr("Port1"), 3, -1));
-    m_port_list.append(std::make_tuple(tr("Port2"), 2, (int)Const::Lumber));
-    for (int i = 0; i < m_port_list.size(); i++)
+    m_harbor_list.append(std::make_tuple(tr("Bank"), 4, -1));
+    m_harbor_list.append(std::make_tuple(tr("Harbor1"), 3, -1));
+    m_harbor_list.append(std::make_tuple(tr("Harbor2"), 2, (int)Const::Lumber));
+    for (int i = 0; i < m_harbor_list.size(); i++)
     {
-        auto tuple = m_port_list[i];
+        auto tuple = m_harbor_list[i];
         QListWidgetItem* item = new QListWidgetItem(std::get<0>(tuple), m_listWidget_user);
         item->setData(Qt::UserRole, i);
         item->setTextColor(Qt::black);
@@ -87,16 +87,16 @@ void TradeDialog::on_comboBox_user_currentIndexChanged(int /*index*/)
         setResourceTableHidden(true);
         ui->comboBox_user->setStyleSheet("");
         m_listWidget_1->clear();
-        if (std::get<2>(m_port_list[id]) == -1)
+        if (std::get<2>(m_harbor_list[id]) == -1)
         {
             for (int i = 0 ; i < Const::RESOURCE_COUNT; i++)
                 addComboBoxItem(i, m_listWidget_1);
         }
         else
-            addComboBoxItem(std::get<2>(m_port_list[id]), m_listWidget_1);
+            addComboBoxItem(std::get<2>(m_harbor_list[id]), m_listWidget_1);
 
         ui->comboBox_1->setCurrentIndex(-1);
-        ui->label_amount_1->setText(QString("x %1").arg(std::get<1>(m_port_list[id])));
+        ui->label_amount_1->setText(QString("x %1").arg(std::get<1>(m_harbor_list[id])));
     }
     else // users
     {
@@ -139,13 +139,13 @@ void TradeDialog::on_pushButton_trade_clicked()
             QMessageBox::information(this, tr("Fail to Trade"), tr("You cannot trade the same resources."));
             return;
         }
-        if (m_player->ResourceAt(resId1) < std::get<1>(m_port_list[id]))
+        if (m_player->ResourceAt(resId1) < std::get<1>(m_harbor_list[id]))
         {
             QMessageBox::information(this, tr("Fail to Trade"), tr("You don't have enough resources."));
             return;
         }
-        m_trader_name = std::get<0>(m_port_list[id]);
-        m_out[resId1] += std::get<1>(m_port_list[id]);
+        m_trader_name = std::get<0>(m_harbor_list[id]);
+        m_out[resId1] += std::get<1>(m_harbor_list[id]);
         m_in[resId2]++;
     }
     else

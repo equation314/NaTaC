@@ -38,7 +38,7 @@ private:
 
     QListWidget *m_listWidget_user, *m_listWidget_1, *m_listWidget_2;
     QList<Player*> m_user_list;
-    QList<std::tuple<QString, int, int>> m_port_list;
+    QList<std::tuple<QString, int, int>> m_harbor_list;
 
     void setResourceTableHidden(bool hidden);
     void addComboBoxItem(int id, QListWidget* list);
