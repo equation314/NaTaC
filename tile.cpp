@@ -4,7 +4,7 @@
 #include <QDebug>
 
 Tile::Tile(Const::Resource type, int num) :
-    m_type(type), m_number(num)
+    m_type(type), m_number(num), m_robber_state(NoneState)
 {
     memset(m_cities, 0, sizeof(m_cities));
 }

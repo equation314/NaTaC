@@ -14,7 +14,7 @@ class Building
 public:
     enum BuildingType { NoneType, RoadType, VillageType, CityType };
     enum BuildingClass { RoadClass, CityClass };
-    enum BuildingState { None, Hover, Built };
+    enum BuildingState { NoneState, HoverState, BuiltState };
 
     Building();
     virtual ~Building() {}
@@ -23,7 +23,7 @@ public:
     int OwnerId() const { return m_owner_id; }
     BuildingType Type() const { return m_type; }
     BuildingState State() const { return m_state; }
-    bool IsBuilt() const { return m_state == BuildingState::Built || m_type != NoneType; }
+    bool IsBuilt() const { return m_state == BuildingState::BuiltState || m_type != NoneType; }
     QColor TransparentColor() const
     {
         QColor color = Color();
