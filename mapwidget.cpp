@@ -11,7 +11,7 @@ using namespace std;
 MapWidget::MapWidget(QWidget* parent) :
     QWidget(parent),
     m_current_building(Building::NoneType), m_loaded(false),
-    m_robber_state(RobberPlaced), m_robber_tile(nullptr)
+    m_robber_state(CantMoveRobber), m_robber_tile(nullptr)
 {
     this->setMouseTracking(true);
 
@@ -210,7 +210,8 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
             if (m_roads[i]->CanPlace() && m_roads[i]->Contains(event->pos(), m_size))
             {
                 m_roads[i]->Build();
-                emit buildingBuilt(m_roads[i], i);
+                emit buildingBuilt(m_roads[i]);
+                break;
             }
     }
 
@@ -221,7 +222,7 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
             if (m_cities[i]->CanPlace() && m_cities[i]->Contains(event->pos(), m_size / 5))
             {
                 m_cities[i]->Build();
-                emit buildingBuilt(m_cities[i], i);
+                emit buildingBuilt(m_cities[i]);
                 if (m_cities[i]->Type() == Building::VillageType && Player::Self()->VillageCount() == Const::INITIAL_CITY_COUNT)
                 {
                     int cnt[Const::RESOURCE_COUNT] = {0};
@@ -235,6 +236,7 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
                         }
                     }
                     emit obtainedResources(cnt);
+                    break;
                 }
             }
     }
@@ -254,6 +256,8 @@ void MapWidget::mousePressEvent(QMouseEvent* event)
                 m_robber_tile = m_tiles[i];
                 m_robber_tile->SetRobberState(Tile::PlacedState);
                 m_robber_state = CantMoveRobber;
+                emit robberPlaced(m_tiles[i]);
+                break;
             }
     }
 
@@ -365,7 +369,7 @@ void MapWidget::ObtainResources(int number)
         if (m_tiles[i]->Number() == number)
         {
             for (int j = 0; j < 6; j++)
-                if (m_tiles[i]->CityAt(j)->OwnerId() == Player::Self()->Id())
+                if (m_tiles[i]->GetRobberState() == Tile::NoneState && m_tiles[i]->CityAt(j)->OwnerId() == Player::Self()->Id())
                 {
                     int x = m_tiles[i]->CityAt(j)->Type() == Building::CityType ? 2 : 1;
                     Player::Self()->ObtainResources(m_tiles[i]->Type(), x);

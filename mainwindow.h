@@ -11,6 +11,7 @@ namespace Ui
 class MainWindow;
 }
 
+class Tile;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -20,10 +21,12 @@ public:
     ~MainWindow();
 
 private slots:
+    void onPrepareFinished();
     void onDiceTimerTimout();
     void onDiceFinished();
     void onObtainedResources(int cnt[Const::RESOURCE_COUNT]);
-    void onBuildingBuilt(Building* building, int id);
+    void onRobberMoved(Tile* tile);
+    void onBuildingBuilt(Building* building);
 
     void on_pushButton_road_clicked(bool checked);
     void on_pushButton_village_clicked(bool checked);

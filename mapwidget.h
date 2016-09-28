@@ -13,7 +13,7 @@ public:
     explicit MapWidget(QWidget* parent = nullptr);
     ~MapWidget();
 
-    void SetCanMoveRobber(bool can) { if (can) m_robber_state = RobberPlaced; else m_robber_state = CantMoveRobber; }
+    void SetCanMoveRobber(bool can) { if (can) m_robber_state = RobberPlaced; else m_robber_state = CannotMoveRobber; }
     void SetCurrentBuilding(Building::BuildingType type) { m_current_building = type; }
     void Load(Const::Resource type[Const::TILE_COUNT], int num[Const::TILE_COUNT]);
     void ObtainResources(int number);
@@ -26,7 +26,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
 
 private:
-    enum RobberState { CantMoveRobber, RobberMoving, RobberPlaced };
+    enum RobberState { CannotMoveRobber, RobberMoving, RobberPlaced };
 
     Tile* m_tiles[Const::TILE_COUNT];
     City* m_cities[Const::CITY_COUNT];
@@ -45,7 +45,8 @@ private:
 
 signals:
     void obtainedResources(int cnt[Const::RESOURCE_COUNT]);
-    void buildingBuilt(Building* building, int id);
+    void robberPlaced(Tile* tile);
+    void buildingBuilt(Building* building);
 };
 
 #endif // MAPWIDGET_H

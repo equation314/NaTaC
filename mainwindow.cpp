@@ -3,10 +3,10 @@
 #include "tradedialog.h"
 #include "ui_mainwindow.h"
 
-#include <QPainter>
+#include <QTime>
 #include <QMimeData>
 #include <QMouseEvent>
-#include <QTime>
+#include <QDesktopWidget>
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->splitter->setStretchFactor(1, 1);
+    this->move((QApplication::desktop()->width()  - this->width())  / 2,
+               (QApplication::desktop()->height() - this->height()) / 2);
 
     Player::SetSelf(new Player(0, "Player0"));
     Player::SetCurrentPlayerId(0);
@@ -26,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&m_dice_timer, &QTimer::timeout, this, &MainWindow::onDiceTimerTimout);
     connect(Player::Self(), &Player::ready, this, &MainWindow::on_pushButton_finish_clicked);
+    connect(ui->widget_map, &MapWidget::robberPlaced, this, &MainWindow::onRobberMoved);
     connect(ui->widget_map, &MapWidget::obtainedResources, this, &MainWindow::onObtainedResources);
     connect(ui->widget_map, &MapWidget::buildingBuilt, this, &MainWindow::onBuildingBuilt);
 }
@@ -97,6 +100,16 @@ void MainWindow::updateResource()
     }
 }
 
+
+
+void MainWindow::onPrepareFinished()
+{
+    ui->label_tip->setText(tr("Your can trade, build or buy development cards multiple times, \nand then click the Finish Round button to finish."));
+    ui->pushButton_trade->setEnabled(Player::Self()->ResourceCount());
+    ui->pushButton_finish->setEnabled(true);
+    updateResource();
+}
+
 void MainWindow::onDiceTimerTimout()
 {
     m_dice_time_elapsed += 10;
@@ -128,10 +141,17 @@ void MainWindow::onDiceFinished()
 {
     qDebug()<<m_current_number;
     sendMessage(tr(" rolled the number <strong>%1</strong>.").arg(m_current_number));
-    ui->widget_map->ObtainResources(m_current_number);
-    ui->pushButton_trade->setEnabled(Player::Self()->ResourceCount());
-    ui->pushButton_finish->setEnabled(true);
-    updateResource();
+
+    if (m_current_number == 7)
+    {
+        ui->widget_map->SetCanMoveRobber(true);
+        ui->label_tip->setText(tr("Please move the robber."));
+    }
+    else
+    {
+        ui->widget_map->ObtainResources(m_current_number);
+        onPrepareFinished();
+    }
 }
 
 void MainWindow::onObtainedResources(int cnt[])
@@ -150,7 +170,12 @@ void MainWindow::onObtainedResources(int cnt[])
     if (ok) sendMessage(message);
 }
 
-void MainWindow::onBuildingBuilt(Building* building, int /*id*/)
+void MainWindow::onRobberMoved(Tile* tile)
+{
+    onPrepareFinished();
+}
+
+void MainWindow::onBuildingBuilt(Building* building)
 {
     updateResource();
 
@@ -250,6 +275,7 @@ void MainWindow::on_pushButton_dice_clicked()
 
 void MainWindow::on_pushButton_finish_clicked()
 {
+    ui->label_tip->setText(tr("Please roll the dice."));
     ui->widget_map->SetCurrentBuilding(Building::NoneType);
     ui->pushButton_road->setEnabled(false);
     ui->pushButton_village->setEnabled(false);
