@@ -30,13 +30,13 @@ private slots:
     void on_pushButton_trade_clicked();
 
 private:
-    Ui::TradeDialog *ui;
+    Ui::TradeDialog* ui;
     Player* m_player;
     QString m_trader_name;
     int m_in[Const::RESOURCE_COUNT];
     int m_out[Const::RESOURCE_COUNT];
 
-    QListWidget *m_listWidget_user, *m_listWidget_1, *m_listWidget_2;
+    QListWidget* m_listWidget_user, *m_listWidget_1, *m_listWidget_2;
     QList<Player*> m_user_list;
     QList<std::tuple<QString, int, int>> m_harbor_list;
 

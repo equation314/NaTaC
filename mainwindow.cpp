@@ -9,7 +9,7 @@
 #include <QDesktopWidget>
 #include <QDebug>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_dice_time_elapsed(0)
@@ -142,7 +142,7 @@ void MainWindow::onDiceTimerTimout()
 
 void MainWindow::onDiceFinished()
 {
-    qDebug()<<m_current_number;
+    qDebug() << m_current_number;
     sendMessage(tr(" rolled the number <strong>%1</strong>.").arg(m_current_number));
 
     if (m_current_number == 7)

@@ -5,7 +5,7 @@
 #include <QSpinBox>
 #include <QDebug>
 
-ResourceTableItemDelegate::ResourceTableItemDelegate(QObject *parent) :
+ResourceTableItemDelegate::ResourceTableItemDelegate(QObject* parent) :
     QItemDelegate(parent)
 {
     for (int i = 0; i < Const::RESOURCE_COUNT; i++)

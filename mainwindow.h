@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
 private slots:
@@ -39,7 +39,7 @@ private slots:
     void on_lineEdit_returnPressed();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
     int m_dice_time_elapsed, m_current_number;
     QTimer m_dice_timer;
 

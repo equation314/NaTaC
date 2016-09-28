@@ -23,7 +23,7 @@ bool Road::CanPlace() const
     return false;
 }
 
-bool Road::Contains(const QPointF &point, double length) const
+bool Road::Contains(const QPointF& point, double length) const
 {
     QPointF o = m_start->Point();
     double x, y;

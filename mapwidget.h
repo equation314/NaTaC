@@ -40,7 +40,7 @@ private:
     Tile* m_robber_tile;
 
     QRectF robberRect(const QPointF& center);
-    void drawRobber(QPainter *painter, const QPointF &center, bool isTransparent = false);
+    void drawRobber(QPainter* painter, const QPointF& center, bool isTransparent = false);
     void buildTiles();
 
 signals:

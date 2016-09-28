@@ -26,7 +26,7 @@ public:
     bool Contains(const QPointF& point, double length) const override;
 
 private:
-    City *m_start, *m_end;
+    City* m_start, *m_end;
     double m_angle;
 };
 

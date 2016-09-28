@@ -3,7 +3,7 @@
 #include <QTime>
 #include <QApplication>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     srand(QTime::currentTime().msecsSinceStartOfDay());
 
