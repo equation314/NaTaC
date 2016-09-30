@@ -1,3 +1,4 @@
+#include "gameinfo.h"
 #include "tradedialog.h"
 #include "ui_tradedialog.h"
 
@@ -10,13 +11,16 @@ TradeDialog::TradeDialog(Player* player, QWidget* parent) :
     m_player(player)
 {
     ui->setupUi(this);
+    this->setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
     ui->label_user->setText(player->ColorName());
 
     m_listWidget_user = new QListWidget(ui->comboBox_user);
     m_listWidget_1 = new QListWidget(ui->comboBox_1);
     m_listWidget_2 = new QListWidget(ui->comboBox_2);
 
-    m_user_list.append(Player::Self());
+    for (auto player : GameInfo::PlayerList())
+        if (player != Player::Self()) m_user_list.append(player);
+
     m_harbor_list.append(std::make_tuple(tr("Bank"), 4, -1));
     m_harbor_list.append(std::make_tuple(tr("Harbor1"), 3, -1));
     m_harbor_list.append(std::make_tuple(tr("Harbor2"), 2, (int)Const::Lumber));

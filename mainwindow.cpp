@@ -1,4 +1,5 @@
 #include "player.h"
+#include "gameinfo.h"
 #include "mainwindow.h"
 #include "tradedialog.h"
 #include "ui_mainwindow.h"
@@ -16,12 +17,15 @@ MainWindow::MainWindow(QWidget* parent) :
 {
     ui->setupUi(this);
     ui->splitter->setStretchFactor(1, 1);
+    this->setWindowTitle(tr("Place the initial buildings") + " - NaTaC");
     this->move((QApplication::desktop()->width()  - this->width())  / 2,
                (QApplication::desktop()->height() - this->height()) / 2);
 
     Player::SetSelf(new Player(0, "Player0"));
     Player::SetCurrentPlayerId(0);
     ui->label_user->setText(Player::Self()->ColorName());
+
+    GameInfo::SetPlayerList({Player::Self()});
 
     updateResource();
     loadMap();
@@ -173,7 +177,7 @@ void MainWindow::onObtainedResources(int cnt[])
     if (ok) sendMessage(message);
 }
 
-void MainWindow::onRobberMoved(Tile* tile)
+void MainWindow::onRobberMoved(Tile* /*tile*/)
 {
     onPrepareFinished();
 }
@@ -203,6 +207,12 @@ void MainWindow::onBuildingBuilt(Building* building)
     default:
         break;
     }
+
+    if (!GameInfo::Round() &&
+        Player::Self()->RoadCount() == Const::INITIAL_ROAD_COUNT &&
+        Player::Self()->VillageCount() == Const::INITIAL_CITY_COUNT &&
+        !Player::Self()->CityCount())
+        on_pushButton_finish_clicked();
 }
 
 void MainWindow::on_pushButton_road_clicked(bool checked)
@@ -278,6 +288,8 @@ void MainWindow::on_pushButton_dice_clicked()
 
 void MainWindow::on_pushButton_finish_clicked()
 {
+    GameInfo::IncRound();
+    this->setWindowTitle(QString("Round %1 - NaTaC").arg(GameInfo::Round()));
     ui->label_tip->setText(tr("Please roll the dice."));
     ui->widget_map->SetCurrentBuilding(Building::NoneType);
     ui->pushButton_road->setEnabled(false);

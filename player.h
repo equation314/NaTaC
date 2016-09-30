@@ -30,7 +30,6 @@ public:
     int ResourceCount() const { return m_resource_count; }
     int ResourceAt(int i) const { return m_resources[i]; }
     QColor Color() const { return Const::PLAYER_COLOR[m_id]; }
-    bool isReady() const { return m_is_ready; }
 
     bool CanbuildRoad() const;
     bool CanbuildVillage() const;
@@ -53,7 +52,6 @@ private:
     QString m_name;
     int m_road_count, m_village_count, m_city_count, m_resource_count, m_score;
     int m_resources[Const::RESOURCE_COUNT];
-    bool m_is_ready;
 
 signals:
     void ready();

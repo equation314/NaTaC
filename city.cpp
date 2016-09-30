@@ -1,5 +1,6 @@
 #include "city.h"
 #include "road.h"
+#include "gameinfo.h"
 
 #include <QDebug>
 
@@ -21,6 +22,6 @@ bool City::CanPlace() const
         if (m_roads[i]->Start() != this && m_roads[i]->Start()->IsBuilt()) return false;
         if (m_roads[i]->End() != this && m_roads[i]->End()->IsBuilt()) return false;
     }
-    if (!Player::Self()->isReady()) return true;
+    if (!GameInfo::Round()) return true;
     return ok;
 }
